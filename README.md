@@ -1,2 +1,2 @@
-# Innoter
+# Innotter
 Innowise Internship task
