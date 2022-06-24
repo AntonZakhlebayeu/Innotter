@@ -7,4 +7,13 @@ class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Page
-        fields = ['uuid', 'title', 'description', 'tags', 'owner', 'followers', 'is_private']
+        fields = ['uuid', 'description', 'tags', 'owner', 'followers', 'is_private']
+
+    def update(self, instance, validated_data):
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
