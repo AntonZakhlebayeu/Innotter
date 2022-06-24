@@ -53,8 +53,14 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(request.user)
 
-        response = Response(serializer.data, status=status.HTTP_200_OK)
-        response.set_cookie('access_token', serializer.data.get('access_token'))
+        access_token = request.COOKIES['access_token']
+        response_dict = {
+            'access_token': access_token
+        }
+        response_dict.update(serializer.data)
+
+        response = Response(response_dict, status=status.HTTP_200_OK)
+        response.set_cookie('access_token', access_token, httponly=True)
 
         return response
 
@@ -67,7 +73,13 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        response = Response(serializer.data, status=status.HTTP_200_OK)
-        response.set_cookie('access_token', serializer.data.get('access_token'))
+        access_token = request.COOKIES['access_token']
+        response_dict = {
+            'access_token': access_token
+        }
+        response_dict.update(serializer.data)
+
+        response = Response(response_dict, status=status.HTTP_200_OK)
+        response.set_cookie('access_token', access_token, httponly=True)
 
         return response

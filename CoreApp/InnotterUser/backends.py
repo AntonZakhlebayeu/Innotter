@@ -48,7 +48,9 @@ def _authenticate_credentials(request, access_token):
         msg = 'This user has been disabled.'
         raise exceptions.AuthenticationFailed(msg)
 
-    return (user, access_token)
+    request.COOKIES['access_token'] = access_token
+
+    return user, access_token
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
