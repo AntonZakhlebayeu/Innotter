@@ -29,7 +29,7 @@ class PageList(generics.ListCreateAPIView):
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated, IsInRoleAdminOrModerator | IsOwner | IsPublicPage)
+    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner),)
 
     def get(self, request, *args, **kwargs):
         page = serializers.serialize('json', Page.objects.filter(pk=kwargs['pk']),
