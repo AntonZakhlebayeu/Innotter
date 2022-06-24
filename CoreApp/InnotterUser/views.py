@@ -1,12 +1,9 @@
-from django.core import serializers
-from django.http import HttpResponse
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from CoreApp import exceptions
 from .models import User
 from .permissions import IsInRoleAdmin
 from .renderers import UserJSONRenderer
@@ -85,23 +82,17 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 class UsersAllAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated, IsInRoleAdmin,)
-    renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
 
-    def get(self, request, *args, **kwargs):
-        users = serializers.serialize('json', User.objects.all(), fields=('email', 'username', 'is_active', 'is_staff',
-                                                                          'role'))
-
-        return HttpResponse(users, content_type='application/json')
+    queryset = User.objects.all()
 
 
-class UserDetailApiView(generics.ListAPIView):
+class UserDetailAPIView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated, IsInRoleAdmin,)
-    renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
+    queryset = User.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        user = serializers.serialize('json', User.objects.filter(pk=kwargs['pk']),
-                                     fields=('email', 'username', 'is_active', 'is_staff', 'role'))
 
-        return HttpResponse(user, content_type='application/json')
+
+
+

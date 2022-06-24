@@ -64,17 +64,18 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     password = serializers.CharField(
         max_length=128,
         min_length=8,
         write_only=True
     )
 
+    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role']
-        read_only_fields = ['is_active', 'is_staff', 'role']
+        fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token']
+        read_only_fields = ['is_active', 'is_staff', 'role', 'pages']
 
     def update(self, instance, validated_data):
 
