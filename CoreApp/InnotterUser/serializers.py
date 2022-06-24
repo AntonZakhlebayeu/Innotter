@@ -30,8 +30,8 @@ class LoginSerializer(serializers.Serializer):
     refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-        email = data.get('email', None)
-        password = data.get('password', None)
+        email = data.get('email', )
+        password = data.get('password', )
 
         if email is None:
             raise serializers.ValidationError(
@@ -73,7 +73,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password')
+        fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role']
+        read_only_fields = ['is_active', 'is_staff', 'role']
 
     def update(self, instance, validated_data):
 

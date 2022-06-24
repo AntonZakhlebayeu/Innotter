@@ -1,9 +1,14 @@
-from rest_framework import status
+from django.core import serializers
+from django.http import HttpResponse
+from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from CoreApp import exceptions
+from .models import User
+from .permissions import IsInRoleAdmin
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer,
@@ -16,7 +21,7 @@ class RegistrationAPIView(APIView):
     renderer_classes = [UserJSONRenderer]
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user = request.data.get('user', )
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
@@ -31,16 +36,15 @@ class LoginAPIView(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user = request.data.get('user', )
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
         response = Response(serializer.data, status=status.HTTP_200_OK)
-        access_token = serializer.data.get('access_token')
-        refresh_token = serializer.data.get('refresh_token')
-        response.set_cookie('access_token', access_token, httponly=True)
-        response.set_cookie('refresh_token', refresh_token, httponly=True)
+
+        response.set_cookie('access_token', serializer.data.get('access_token', ), httponly=True)
+        response.set_cookie('refresh_token', serializer.data.get('refresh_token', ), httponly=True)
 
         return response
 
@@ -59,13 +63,10 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         }
         response_dict.update(serializer.data)
 
-        response = Response(response_dict, status=status.HTTP_200_OK)
-        response.set_cookie('access_token', access_token, httponly=True)
-
-        return response
+        return Response(response_dict, status=status.HTTP_200_OK).set_cookie('access_token', access_token, httponly=True)
 
     def update(self, request, *args, **kwargs):
-        serializer_data = request.data.get('user', {})
+        serializer_data = request.data.get('user', )
 
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
@@ -79,7 +80,28 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         }
         response_dict.update(serializer.data)
 
-        response = Response(response_dict, status=status.HTTP_200_OK)
-        response.set_cookie('access_token', access_token, httponly=True)
+        return Response(response_dict, status=status.HTTP_200_OK).set_cookie('access_token', access_token, httponly=True)
 
-        return response
+
+class UsersAllAPIView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, IsInRoleAdmin,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        users = serializers.serialize('json', User.objects.all(), fields=('email', 'username', 'is_active', 'is_staff',
+                                                                          'role'))
+
+        return HttpResponse(users, content_type='application/json')
+
+
+class UserDetailApiView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, IsInRoleAdmin,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        user = serializers.serialize('json', User.objects.filter(pk=kwargs['pk']),
+                                     fields=('email', 'username', 'is_active', 'is_staff', 'role'))
+
+        return HttpResponse(user, content_type='application/json')

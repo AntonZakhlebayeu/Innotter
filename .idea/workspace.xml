@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Added registration and authorization.">
+    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Fixed access and refresh tokens.">
+      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/permissions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/backends.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/backends.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/renderers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/renderers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="Feature/Pages-Logic" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -137,7 +139,7 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="28130000" />
+      <workItem from="1655970887672" duration="36404000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -160,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655999608280</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fixed access and refresh tokens.">
+      <created>1656056700738</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1656056700738</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,7 +220,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Added registration and authorization." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added registration and authorization." />
+    <MESSAGE value="Fixed access and refresh tokens." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed access and refresh tokens." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Innotter$CoreApp.coverage" NAME="CoreApp Coverage Results" MODIFIED="1655912536217" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

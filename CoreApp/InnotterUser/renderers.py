@@ -7,9 +7,9 @@ class UserJSONRenderer(JSONRenderer):
     charset = 'utf-8'
 
     def render(self, data, media_type=None, renderer_context=None):
-        errors = data.get('errors', None)
+        errors = data.get('errors', )
 
-        token = data.get('token', None)
+        token = data.get('token', )
 
         if errors is not None:
             return super(UserJSONRenderer, self).render(data)
