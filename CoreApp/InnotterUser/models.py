@@ -2,8 +2,9 @@ import jwt
 
 from datetime import datetime, timedelta
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, PermissionsMixin, Permission
 from django.db import models
+from InnotterPage.permissions import IsInRoleAdminOrModerator
 
 from CoreApp import settings
 
@@ -89,6 +90,10 @@ class User(AbstractUser, PermissionsMixin):
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token
+
+    def set_permissions(self):
+        if self.role == "admin" or self.role == "moderator":
+            Per
 
 
 

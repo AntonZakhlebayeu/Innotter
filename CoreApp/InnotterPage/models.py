@@ -1,7 +1,5 @@
 from django.db import models
 
-from InnotterUser.models import User
-
 
 class Tag(models.Model):
     name = models.CharField(max_length=30, unique=True)
