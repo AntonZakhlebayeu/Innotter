@@ -73,8 +73,7 @@ class User(AbstractUser, PermissionsMixin):
         self.save()
 
     def _generate_access_jwt_token(self):
-        dt = datetime.now() + timedelta(seconds=30)
-        print(self.id)
+        dt = datetime.now() + timedelta(minutes=5)
         token = jwt.encode({
             'id': self.pk,
             'exp': int(dt.strftime('%s'))
@@ -83,7 +82,7 @@ class User(AbstractUser, PermissionsMixin):
         return token
 
     def _generate_refresh_token(self):
-        dt = datetime.now() + timedelta(days=1)
+        dt = datetime.now() + timedelta(hours=5)
 
         token = jwt.encode({
             'exp': int(dt.strftime('%s'))
