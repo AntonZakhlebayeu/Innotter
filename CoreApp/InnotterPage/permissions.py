@@ -9,10 +9,6 @@ class IsInRoleAdminOrModerator(BasePermission):
         else:
             return request.user.role == 'admin' or request.user.role == 'moderator'
 
-    @property
-    def message(self):
-        return "A"
-
 
 class IsOwner(BasePermission):
     def has_permission(self, request, view, **kwargs):
