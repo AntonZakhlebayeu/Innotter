@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from .models import User
+from InnotterPage.serializers import SmallPageInfoSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -64,6 +65,7 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     password = serializers.CharField(
         max_length=128,
         min_length=8,
@@ -71,11 +73,18 @@ class UserSerializer(serializers.ModelSerializer):
     )
 
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    follows = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token']
-        read_only_fields = ['is_active', 'is_staff', 'role', 'pages']
+        fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token', 'follows']
+        read_only_fields = ['is_active', 'is_staff', 'role', 'pages', 'follows']
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["pages"] = SmallPageInfoSerializer(instance.pages.all(), many=True).data
+        rep['follows'] = SmallPageInfoSerializer(instance.pages.all(), many=True).data
+        return rep
 
     def update(self, instance, validated_data):
 
@@ -90,3 +99,12 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class FollowerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username']
+        read_only_fields = ['username']
+

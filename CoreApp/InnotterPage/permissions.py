@@ -14,10 +14,6 @@ class IsOwner(BasePermission):
     def has_permission(self, request, view, **kwargs):
         return request.user.pk == Page.objects.get(pk=view.kwargs['pk']).owner_id
 
-    @property
-    def message(self):
-        return "B"
-
 
 class IsPublicPage(BasePermission):
     def has_permission(self, request, view, **kwargs):
@@ -25,7 +21,3 @@ class IsPublicPage(BasePermission):
             return not Page.objects.get(pk=view.kwargs['pk']).is_private
         else:
             return False
-
-    @property
-    def message(self):
-        return "C"
