@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Improved output for users and pages.">
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/migrations/0004_alter_page_followers_alter_page_tags.py" afterDir="false" />
+    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Added tags logic.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +134,7 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="70100000" />
+      <workItem from="1655970887672" duration="70786000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -223,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656160138297</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added tags logic.">
+      <created>1656188745192</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1656188745192</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,7 +285,8 @@
     <MESSAGE value="Added permission classes." />
     <MESSAGE value="Fixed views for pages." />
     <MESSAGE value="Improved output for users and pages." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved output for users and pages." />
+    <MESSAGE value="Added tags logic." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added tags logic." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
