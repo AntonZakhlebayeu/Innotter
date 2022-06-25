@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 import InnotterUser.serializers
-from .models import Page, Tag
+from InnotterTag.serializers import TagPageSerializer
+from .models import Page
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -39,31 +40,4 @@ class SmallPageInfoSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         rep['tags'] = TagPageSerializer(instance.tags.all(), many=True).data
         return rep
-
-
-class ForTagPageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Page
-        fields = ['uuid', 'name', 'owner']
-
-
-class TagSerializer(serializers.ModelSerializer):
-    pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model = Tag
-        fields = ['id', 'name', 'pages']
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['pages'] = ForTagPageSerializer(instance.pages.all(), many=True).data
-        return rep
-
-
-class TagPageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Tag
-        fields = ['name']
 
