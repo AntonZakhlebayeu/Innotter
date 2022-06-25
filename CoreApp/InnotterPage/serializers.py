@@ -6,6 +6,7 @@ from .models import Page, Tag
 
 class PageSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    tags = serializers.JSONField()
 
     class Meta:
         model = Page
@@ -40,6 +41,13 @@ class SmallPageInfoSerializer(serializers.ModelSerializer):
         return rep
 
 
+class ForTagPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Page
+        fields = ['uuid', 'name', 'owner']
+
+
 class TagSerializer(serializers.ModelSerializer):
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
@@ -47,14 +55,10 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'name', 'pages']
 
-    def update(self, instance, validated_data):
-
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-
-        instance.save()
-
-        return instance
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['pages'] = ForTagPageSerializer(instance.pages.all(), many=True).data
+        return rep
 
 
 class TagPageSerializer(serializers.ModelSerializer):
