@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -34,6 +36,10 @@ class LoginAPIView(APIView):
 
     def post(self, request):
         user = request.data.get('user', )
+
+        user_model = User.objects.get(email=user['email'])
+        user_model.last_login = datetime.now()
+        user_model.save()
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)

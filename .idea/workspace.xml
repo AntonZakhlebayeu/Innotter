@@ -1,26 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Improved tags logic.">
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/migrations/0005_delete_tag_alter_page_tags.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/CoreApp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/CoreApp/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/CoreApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/CoreApp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" afterDir="false" />
+    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Created a separate skeleton for tags.">
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +133,7 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="72034000" />
+      <workItem from="1655970887672" duration="72342000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -251,7 +233,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656189357969</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Created a separate skeleton for tags.">
+      <created>1656190599687</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1656190599687</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -311,7 +300,8 @@
     <MESSAGE value="Improved output for users and pages." />
     <MESSAGE value="Added tags logic." />
     <MESSAGE value="Improved tags logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved tags logic." />
+    <MESSAGE value="Created a separate skeleton for tags." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created a separate skeleton for tags." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
