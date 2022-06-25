@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.http import JsonResponse
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -38,6 +39,10 @@ class LoginAPIView(APIView):
         user = request.data.get('user', )
 
         user_model = User.objects.get(email=user['email'])
+
+        if user_model.is_blocked:
+            return JsonResponse({'detail': 'You are blocked.'})
+
         user_model.last_login = datetime.now()
         user_model.save()
 
@@ -101,6 +106,20 @@ class UserDetailAPIView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated, IsInRoleAdmin,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
+class UserBlocking(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated, IsInRoleAdmin,)
+    serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = request.data.get('user', )
+
+        user_model = User.objects.get(email=user['email'])
+        user_model.is_blocked = user['is_blocked']
+        user_model.save()
+
+        return Response(UserSerializer(user_model).data, status=status.HTTP_200_OK)
 
 
 

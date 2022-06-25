@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Created a separate skeleton for tags.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterUser/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Feature/Pages-Logic" />
+        <entry key="$PROJECT_DIR$" value="Feature/Tags-Logic" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -133,7 +136,7 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="72342000" />
+      <workItem from="1655970887672" duration="73002000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -240,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656190599687</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Created a separate skeleton for tags.">
+      <created>1656191016743</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1656191016743</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,6 +319,11 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py</url>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/CoreApp/InnotterUser/serializers.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
