@@ -1,6 +1,3 @@
-import json
-
-from django.http import HttpResponse, JsonResponse
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -64,13 +61,13 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
 
             page.tags.add(Tag.objects.get(name=tag['name']))
 
-        return JsonResponse(PageSerializer(page).data, safe=False)
+        return Response(PageSerializer(page).data)
 
     def delete(self, request, *args, **kwargs):
         page = Page.objects.get(pk=kwargs['pk'])
         page.delete()
 
-        return HttpResponse(json.dumps({"detail": "Deleted."}), content_type='application/json')
+        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class PageBlocking(generics.CreateAPIView):

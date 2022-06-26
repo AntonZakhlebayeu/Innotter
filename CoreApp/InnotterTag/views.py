@@ -1,8 +1,7 @@
-import json
-
-from django.http import HttpResponse, JsonResponse
-from rest_framework import generics
+from django.http import HttpResponse
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from InnotterPage.models import Page
 from InnotterTag.models import Tag
@@ -26,9 +25,9 @@ class TagsAdministrate(generics.RetrieveDestroyAPIView):
             tag = Tag.objects.get(pk=kwargs['pk'])
             tag.delete()
         except Tag.DoesNotExist:
-            return HttpResponse(json.dumps({"detail": "Tag does not exist."}), content_type='application/json')
+            return Response({"detail": "Tag does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        return HttpResponse(json.dumps({"detail": "Deleted."}), content_type='application/json')
+        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TagList(generics.ListCreateAPIView):
@@ -46,7 +45,7 @@ class TagList(generics.ListCreateAPIView):
         tag_data = TagSerializer(data=page.tags.all(), many=True)
         tag_data.is_valid()
 
-        return JsonResponse(tag_data.data, safe=False)
+        return Response(tag_data.data)
 
 
 class TagDetail(generics.RetrieveDestroyAPIView):
@@ -59,20 +58,20 @@ class TagDetail(generics.RetrieveDestroyAPIView):
         try:
             Page.objects.get(pk=kwargs['pk']).tags.get(pk=kwargs['pk_tag'])
         except Tag.DoesNotExist:
-            return HttpResponse(json.dumps({"detail": "Tag does not exists."}), content_type='application/json')
+            return Response({"detail": "Tag does not exists."}, status=status.HTTP_404_NOT_FOUND)
 
         tag_data = TagSerializer(Tag.objects.get(pk=kwargs['pk_tag']))
 
-        return JsonResponse(tag_data.data, safe=False)
+        return Response(tag_data.data, status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request, *args, **kwargs):
 
         try:
             Page.objects.get(pk=kwargs['pk']).tags.get(pk=kwargs['pk_tag'])
         except Tag.DoesNotExist:
-            return HttpResponse(json.dumps({"detail": "Tag does not exists."}), content_type='application/json')
+            return HttpResponse({"detail": "Tag does not exists."}, status=status.HTTP_404_NOT_FOUND)
 
         Page.objects.get(pk=kwargs['pk']).tags.remove(Tag.objects.get(pk=kwargs['pk_tag']))
 
-        return HttpResponse(json.dumps({"detail": "Deleted."}), content_type='application/json')
+        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 

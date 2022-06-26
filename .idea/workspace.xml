@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Added page blocking/unblocking." />
+    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Fixes.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterTag/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterTag/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,22 +48,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/antonzakhlebayeu/InnowiseInternship/Innotter",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/antonzakhlebayeu/InnowiseInternship/Innotter&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -131,7 +135,8 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="80263000" />
+      <workItem from="1655970887672" duration="80641000" />
+      <workItem from="1656253970082" duration="3545000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -259,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656253331939</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Fixes.">
+      <created>1656253662996</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1656253662996</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -322,7 +334,8 @@
     <MESSAGE value="Created a separate skeleton for tags." />
     <MESSAGE value="Created logic for user blocking." />
     <MESSAGE value="Added page blocking/unblocking." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added page blocking/unblocking." />
+    <MESSAGE value="Fixes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
