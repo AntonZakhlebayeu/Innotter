@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Created logic for user blocking.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CoreApp/InnotterPage/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="e7cfb9e9-1a7c-4010-8973-d77ed6412ca2" name="Changes" comment="Added page blocking/unblocking." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -137,7 +131,7 @@
       <workItem from="1655914794357" duration="95000" />
       <workItem from="1655914963809" duration="2790000" />
       <workItem from="1655917930789" duration="13030000" />
-      <workItem from="1655970887672" duration="79829000" />
+      <workItem from="1655970887672" duration="80263000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1655974746733</created>
@@ -258,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656191644251</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added page blocking/unblocking.">
+      <created>1656253331939</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1656253331939</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,7 +321,8 @@
     <MESSAGE value="Improved tags logic." />
     <MESSAGE value="Created a separate skeleton for tags." />
     <MESSAGE value="Created logic for user blocking." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created logic for user blocking." />
+    <MESSAGE value="Added page blocking/unblocking." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added page blocking/unblocking." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

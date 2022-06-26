@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from InnotterTag.serializers import TagSerializer
 from .models import Page
 from .serializers import PageSerializer
-from .permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockPage
+from .permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockedPage
 from InnotterTag.models import Tag
 
 
@@ -49,7 +49,7 @@ class PageList(generics.ListCreateAPIView):
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner) & IsBlockPage,)
+    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner) & IsBlockedPage,)
 
     def put(self, request, *args, **kwargs):
         page = Page.objects.get(pk=kwargs['pk'])
