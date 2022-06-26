@@ -1,14 +1,28 @@
 import json
 
 from django.http import HttpResponse, JsonResponse
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from datetime import datetime, timedelta
 
 from InnotterTag.serializers import TagSerializer
 from .models import Page
 from .serializers import PageSerializer
-from .permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner
+from .permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockPage
 from InnotterTag.models import Tag
+
+
+def time_converter(time: list):
+    int_time = int(time[1])
+
+    time_dict = {
+        'minutes': timedelta(minutes=int_time),
+        'hours': timedelta(hours=int_time),
+        'days': timedelta(days=int_time)
+    }
+
+    return time_dict[time[0].lower()]
 
 
 class PageList(generics.ListCreateAPIView):
@@ -35,7 +49,7 @@ class PageList(generics.ListCreateAPIView):
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner),)
+    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner) & IsBlockPage,)
 
     def put(self, request, *args, **kwargs):
         page = Page.objects.get(pk=kwargs['pk'])
@@ -57,3 +71,34 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
         page.delete()
 
         return HttpResponse(json.dumps({"detail": "Deleted."}), content_type='application/json')
+
+
+class PageBlocking(generics.CreateAPIView):
+    serializer_class = PageSerializer
+    permission_classes = (IsAuthenticated, IsInRoleAdminOrModerator,)
+
+    def post(self, request, *args, **kwargs):
+        page = request.data.get('page', )
+
+        page_model = Page.objects.get(uuid=page['uuid'])
+        time = page['block_time'].split()
+        page_model.unblock_date = datetime.now() + time_converter(time)
+
+        page_model.save()
+
+        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
+
+
+class PageUnblocking(generics.CreateAPIView):
+    serializer_class = PageSerializer
+    permission_classes = (IsAuthenticated, IsInRoleAdminOrModerator,)
+
+    def post(self, request, *args, **kwargs):
+        page = request.data.get('page', )
+
+        page_model = Page.objects.get(uuid=page['uuid'])
+
+        page_model.unblock_date = datetime.now()
+        page_model.save()
+
+        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)

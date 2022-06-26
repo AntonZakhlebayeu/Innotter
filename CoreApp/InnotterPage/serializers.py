@@ -11,7 +11,7 @@ class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Page
-        fields = ['uuid', 'name', 'description', 'tags', 'owner', 'followers', 'is_private']
+        fields = ['uuid', 'name', 'description', 'tags', 'owner', 'followers', 'is_private', 'unblock_date']
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
