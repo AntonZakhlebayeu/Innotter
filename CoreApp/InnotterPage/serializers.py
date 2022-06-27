@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 import InnotterUser.serializers
 from InnotterTag.serializers import TagPageSerializer
-from .models import Page
+from InnotterPage.models import Page
 
 
 class PageSerializer(serializers.ModelSerializer):

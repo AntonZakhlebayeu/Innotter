@@ -7,10 +7,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import User
-from .permissions import IsInRoleAdmin
-from .renderers import UserJSONRenderer
-from .serializers import (
+from InnotterUser.models import User
+from InnotterUser.permissions import IsInRoleAdmin
+from InnotterUser.renderers import UserJSONRenderer
+from InnotterUser.serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer,
 )
 

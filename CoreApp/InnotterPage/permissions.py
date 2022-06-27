@@ -1,10 +1,9 @@
-from datetime import datetime, timezone
+from datetime import datetime
 import pytz
-from pytz.reference import Eastern
 
 from rest_framework.permissions import BasePermission
 
-from .models import Page
+from InnotterPage.models import Page
 
 
 class IsInRoleAdminOrModerator(BasePermission):
@@ -36,4 +35,5 @@ class IsBlockedPage(BasePermission):
         if request.user.role == 'admin' or request.user.role == 'moderator':
             return True
 
-        return datetime.now().replace(tzinfo=Eastern) > Page.objects.get(pk=view.kwargs['pk']).unblock_date.replace(tzinfo=Eastern)
+        return datetime.now().replace(tzinfo=pytz.timezone('US/Eastern')) > Page.objects.get(pk=view.kwargs['pk']).\
+            unblock_date.replace(tzinfo=pytz.timezone('US/Eastern'))

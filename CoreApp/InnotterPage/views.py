@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from datetime import datetime, timedelta
 
 from InnotterTag.serializers import TagSerializer
-from .models import Page
-from .serializers import PageSerializer
-from .permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockedPage
+from InnotterPage.models import Page
+from InnotterPage.serializers import PageSerializer
+from InnotterPage.permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockedPage
 from InnotterTag.models import Tag
 
 

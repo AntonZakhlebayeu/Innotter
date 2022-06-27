@@ -12,7 +12,7 @@ RUN pip install "poetry==$POETRY_VERSION" && poetry --version
 
 RUN poetry config virtualenvs.create false && poetry install
 
-RUN pip install -r requirements.txt
+RUN poetry install -r requirements.txt
 
 
 EXPOSE 8000

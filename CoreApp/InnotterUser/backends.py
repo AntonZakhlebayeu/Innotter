@@ -4,7 +4,7 @@ from django.conf import settings
 
 from rest_framework import authentication, exceptions
 
-from .models import User
+from InnotterUser.models import User
 
 
 def expired_token(request):
