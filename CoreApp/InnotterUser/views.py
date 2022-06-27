@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from django.http import JsonResponse
-from rest_framework import status, generics
+from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from InnotterUser.mixins import UserMixin
 from InnotterUser.models import User
 from InnotterUser.permissions import IsInRoleAdmin
 from InnotterUser.renderers import UserJSONRenderer
@@ -41,7 +41,7 @@ class LoginAPIView(APIView):
         user_model = User.objects.get(email=user['email'])
 
         if user_model.is_blocked:
-            return JsonResponse({'detail': 'You are blocked.'})
+            return Response({'detail': 'You are blocked.'}, status=status.HTTP_400_BAD_REQUEST)
 
         user_model.last_login = datetime.now()
         user_model.save()
@@ -95,33 +95,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return response
 
 
-class UsersAllAPIView(generics.ListAPIView):
+class UsersAllAPIView(UserMixin):
     permission_classes = (IsAuthenticated, IsInRoleAdmin,)
     serializer_class = UserSerializer
 
     queryset = User.objects.all()
-
-
-class UserDetailAPIView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated, IsInRoleAdmin,)
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-
-class UserBlocking(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated, IsInRoleAdmin,)
-    serializer_class = UserSerializer
-
-    def post(self, request, *args, **kwargs):
-        user = request.data.get('user', )
-
-        user_model = User.objects.get(email=user['email'])
-        user_model.is_blocked = user['is_blocked']
-        user_model.save()
-
-        return Response(UserSerializer(user_model).data, status=status.HTTP_200_OK)
-
-
-
-
-

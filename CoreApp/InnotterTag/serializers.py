@@ -29,3 +29,10 @@ class ForTagPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = ['uuid', 'name', 'owner']
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        from InnotterUser.serializers import UsernameSerializer
+        rep['owner'] = UsernameSerializer(instance.owner).data
+        return rep
+

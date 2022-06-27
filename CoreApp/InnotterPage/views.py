@@ -1,13 +1,13 @@
 from rest_framework import generics, status
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import datetime, timedelta
 
-from InnotterTag.serializers import TagSerializer
 from InnotterPage.models import Page
 from InnotterPage.serializers import PageSerializer
 from InnotterPage.permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockedPage
-from InnotterTag.models import Tag
+from InnotterPage.mixins import PageMixin
 
 
 def time_converter(time: list):
@@ -22,52 +22,10 @@ def time_converter(time: list):
     return time_dict[time[0].lower()]
 
 
-class PageList(generics.ListCreateAPIView):
+class PageList(PageMixin):
     serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated, IsInRoleAdminOrModerator)
+    permission_classes = (IsAuthenticated & (IsInRoleAdminOrModerator | IsPublicPage | IsOwner) & IsBlockedPage, )
     queryset = Page.objects.all()
-
-    def perform_create(self, serializer):
-        tags = []
-
-        for tag in self.request.data.get('tags', ):
-            try:
-                Tag.objects.get(name=tag['name']).pk
-            except Tag.DoesNotExist:
-                tag_serializer = TagSerializer(data={"name": tag['name']})
-                tag_serializer.is_valid()
-                tag_serializer.save()
-
-            tags.append(Tag.objects.get(name=tag['name']).pk)
-
-        serializer.save(owner=self.request.user, tags=tags)
-
-
-class PageDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Page.objects.all()
-    serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner) & IsBlockedPage,)
-
-    def put(self, request, *args, **kwargs):
-        page = Page.objects.get(pk=kwargs['pk'])
-
-        for tag in request.data.get('tags', ):
-            try:
-                Tag.objects.get(name=tag['name']).pk
-            except Tag.DoesNotExist:
-                tag_serializer = TagSerializer(data={"name": tag['name']})
-                tag_serializer.is_valid()
-                tag_serializer.save()
-
-            page.tags.add(Tag.objects.get(name=tag['name']))
-
-        return Response(PageSerializer(page).data)
-
-    def delete(self, request, *args, **kwargs):
-        page = Page.objects.get(pk=kwargs['pk'])
-        page.delete()
-
-        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
 class PageBlocking(generics.CreateAPIView):

@@ -89,11 +89,3 @@ class User(AbstractUser, PermissionsMixin):
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token
-
-    def set_permissions(self):
-        if self.role == "admin" or self.role == "moderator":
-            Per
-
-
-
-

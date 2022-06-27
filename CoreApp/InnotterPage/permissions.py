@@ -29,6 +29,9 @@ class IsPublicPage(BasePermission):
 
 class IsBlockedPage(BasePermission):
     def has_permission(self, request, view, **kwargs):
+        if request.method == "POST":
+            return True
+
         if Page.objects.get(pk=view.kwargs['pk']).unblock_date is None:
             return True
 

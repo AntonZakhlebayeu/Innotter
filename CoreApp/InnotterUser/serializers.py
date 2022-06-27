@@ -101,7 +101,7 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class FollowerSerializer(serializers.ModelSerializer):
+class UsernameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User

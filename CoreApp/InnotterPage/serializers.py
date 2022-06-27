@@ -15,14 +15,17 @@ class PageSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["followers"] = InnotterUser.serializers.FollowerSerializer(instance.followers.all(), many=True).data
+        rep["followers"] = InnotterUser.serializers.UsernameSerializer(instance.followers.all(), many=True).data
         rep['tags'] = TagPageSerializer(instance.tags.all(), many=True).data
         return rep
 
     def update(self, instance, validated_data):
 
         for key, value in validated_data.items():
-            setattr(instance, key, value)
+            if key == 'tags':
+                instance.tags.set(value)
+            else:
+                setattr(instance, key, value)
 
         instance.save()
 
