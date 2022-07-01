@@ -4,6 +4,7 @@ import pytz
 from rest_framework.permissions import BasePermission
 
 from InnotterPage.models import Page
+from InnotterUser.roles import Roles
 
 
 class IsInRoleAdminOrModerator(BasePermission):
@@ -11,17 +12,29 @@ class IsInRoleAdminOrModerator(BasePermission):
         if request.method == "POST":
             return True
         else:
-            return request.user.role == 'admin' or request.user.role == 'moderator'
+            return request.user.role == Roles.ADMIN or request.user.role == Roles.MODERATOR
 
 
 class IsOwner(BasePermission):
     def has_permission(self, request, view, **kwargs):
+        if request.method == 'GET':
+            try:
+                pk = kwargs['pk']
+            except KeyError:
+                return False
+
         return request.user.pk == Page.objects.get(pk=view.kwargs['pk']).owner_id
 
 
 class IsPublicPage(BasePermission):
     def has_permission(self, request, view, **kwargs):
         if request.method == "GET":
+
+            try:
+                pk = kwargs['pk']
+            except KeyError:
+                return False
+
             return not Page.objects.get(pk=view.kwargs['pk']).is_private
         else:
             return False
@@ -32,10 +45,15 @@ class IsBlockedPage(BasePermission):
         if request.method == "POST":
             return True
 
+        try:
+            pk = kwargs['pk']
+        except KeyError:
+            return True
+
         if Page.objects.get(pk=view.kwargs['pk']).unblock_date is None:
             return True
 
-        if request.user.role == 'admin' or request.user.role == 'moderator':
+        if request.user.role == Roles.ADMIN or request.user.role == Roles.MODERATOR:
             return True
 
         return datetime.now().replace(tzinfo=pytz.timezone('US/Eastern')) > Page.objects.get(pk=view.kwargs['pk']).\

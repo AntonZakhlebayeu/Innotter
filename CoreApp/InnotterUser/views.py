@@ -11,7 +11,7 @@ from InnotterUser.models import User
 from InnotterUser.permissions import IsInRoleAdmin
 from InnotterUser.renderers import UserJSONRenderer
 from InnotterUser.serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer,
+    LoginSerializer, RegistrationSerializer, UserSerializer, UserAdministrateSerializer,
 )
 
 
@@ -97,6 +97,6 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 class UsersAllAPIView(UserMixin):
     permission_classes = (IsAuthenticated, IsInRoleAdmin,)
-    serializer_class = UserSerializer
+    serializer_class = UserAdministrateSerializer
 
     queryset = User.objects.all()

@@ -1,30 +1,13 @@
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin
-from rest_framework.response import Response
-
-from InnotterUser.models import User
-from InnotterUser.serializers import UserSerializer
+from rest_framework import viewsets
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 
 
-class UserMixin(GenericAPIView,
+class UserMixin(viewsets.GenericViewSet,
                 ListModelMixin,
-                CreateModelMixin,
+                UpdateModelMixin,
                 RetrieveModelMixin):
 
-    def get(self, request, *args, **kwargs):
-        try:
-            pk = kwargs['pk']
-            return self.retrieve(request, *args, **kwargs)
-        except KeyError:
-            return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        user = request.data.get('user', )
-
-        user_model = User.objects.get(email=user['email'])
-        user_model.is_blocked = user['is_blocked']
-        user_model.save()
-
-        return Response(UserSerializer(user_model).data, status=status.HTTP_200_OK)
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 

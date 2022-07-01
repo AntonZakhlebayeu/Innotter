@@ -1,6 +1,5 @@
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, DestroyModelMixin
+from rest_framework import status, viewsets
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, DestroyModelMixin, CreateModelMixin
 from rest_framework.response import Response
 
 from InnotterPage.models import Page
@@ -8,24 +7,12 @@ from InnotterTag.models import Tag
 from InnotterTag.serializers import TagSerializer
 
 
-class TagAdministrateMixin(GenericAPIView,
+class TagAdministrateMixin(viewsets.GenericViewSet,
                            ListModelMixin,
                            RetrieveModelMixin,
                            DestroyModelMixin):
 
-    def perform_create(self, serializer):
-        serializer.save()
-        page = Page.objects.get(pk=self.kwargs['pk'])
-        page.tags.add(Tag.objects.get(name=self.request.data.get('name')))
-
-    def get(self, request, *args, **kwargs):
-        try:
-            pk = kwargs['pk']
-            return self.retrieve(request, *args, **kwargs)
-        except KeyError:
-            return self.list(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         try:
             tag = Tag.objects.get(pk=kwargs['pk'])
             tag.delete()
@@ -35,31 +22,11 @@ class TagAdministrateMixin(GenericAPIView,
         return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
-class TagMixin(GenericAPIView,
+class TagMixin(viewsets.GenericViewSet,
                ListModelMixin,
+               CreateModelMixin,
                RetrieveModelMixin,
                DestroyModelMixin):
-
-    def get(self, request, *args, **kwargs):
-        try:
-            pk = kwargs['pk']
-            return self.retrieve(request, *args, **kwargs)
-        except KeyError:
-            return self.list(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-    def list(self, request, *args, **kwargs):
-        try:
-            page = Page.objects.get(pk=kwargs['pk'])
-        except Page.DoesNotExist:
-            return Response({'detail': 'Page does not exist.'}, status=status.HTTP_404_NOT_FOUND)
-
-        tag_data = TagSerializer(data=page.tags.all(), many=True)
-        tag_data.is_valid()
-
-        return Response(tag_data.data)
 
     def retrieve(self, request, *args, **kwargs):
 

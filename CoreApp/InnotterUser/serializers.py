@@ -78,7 +78,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'username', 'password', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token', 'follows', 'is_blocked']
-        read_only_fields = ['is_active', 'is_staff', 'role', 'pages', 'follows']
+        read_only_fields = ['refresh_token', 'is_active', 'is_staff', 'role', 'pages', 'follows']
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -107,4 +107,14 @@ class UsernameSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username']
         read_only_fields = ['username']
+
+
+class UserAdministrateSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token',
+                  'follows', 'is_blocked']
+        read_only_fields = ['email', 'username', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token',
+                            'follows']
+
 

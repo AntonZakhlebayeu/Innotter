@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from InnotterPage.models import Page
 from InnotterPage.serializers import PageSerializer
 from InnotterPage.permissions import IsInRoleAdminOrModerator, IsPublicPage, IsOwner, IsBlockedPage
-from InnotterPage.mixins import PageMixin
 
 
 def time_converter(time: list):
@@ -22,7 +21,7 @@ def time_converter(time: list):
     return time_dict[time[0].lower()]
 
 
-class PageList(PageMixin):
+class PageList(viewsets.ModelViewSet):
     serializer_class = PageSerializer
     permission_classes = (IsAuthenticated & (IsInRoleAdminOrModerator | IsPublicPage | IsOwner) & IsBlockedPage, )
     queryset = Page.objects.all()

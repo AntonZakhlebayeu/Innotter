@@ -16,6 +16,17 @@ class TagSerializer(serializers.ModelSerializer):
         rep['pages'] = ForTagPageSerializer(instance.pages.all(), many=True).data
         return rep
 
+    def create(self, validated_data):
+        print(validated_data)
+        tag = Tag.objects.create(name=validated_data['name'])
+
+        request = self.context.get("request")
+        if request:
+            page = Page.objects.get(pk=request.parser_context['kwargs']['pk'])
+            page.tags.add(tag)
+
+        return tag
+
 
 class TagPageSerializer(serializers.ModelSerializer):
 

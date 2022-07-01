@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin, Permissio
 from django.db import models
 
 from CoreApp import settings
+from InnotterUser.roles import Roles
 
 
 class UserManager(BaseUserManager):
@@ -37,11 +38,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser, PermissionsMixin):
-    class Roles(models.TextChoices):
-        USER = 'user'
-        MODERATOR = 'moderator'
-        ADMIN = 'admin'
-
     email = models.EmailField(unique=True)
     username = models.CharField(db_index=True, max_length=255, unique=True)
     image_s3_path = models.CharField(max_length=200, null=True, blank=True)
