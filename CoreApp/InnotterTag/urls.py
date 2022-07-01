@@ -1,13 +1,10 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from InnotterTag.views import (
-    TagList, AllTagList
+    TagList
 )
 
-router_all_tags = routers.SimpleRouter()
-router_all_tags.register(r'tags', AllTagList)
 
 app_name = 'Tags'
 urlpatterns = [
@@ -15,7 +12,9 @@ urlpatterns = [
                                                              'delete': 'destroy'})),
     path('page/<int:pk>/tags/', TagList.as_view({'get': 'list',
                                                  'post': "create"})),
-    path('', include(router_all_tags.urls)),
+    path('tag/get_tag/<int:pk>/', TagList.as_view({'get': 'get_tag'})),
+    path('tags/all/', TagList.as_view({'get': 'all'})),
+    path('tag/delete_tag/<int:pk>/', TagList.as_view({'delete': 'delete_tag'}))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

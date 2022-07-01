@@ -1,19 +1,19 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework import routers
 
 from InnotterPage.views import (
-    PageList, PageBlocking, PageUnblocking
+    PageList
 )
-
-router = routers.SimpleRouter()
-router.register(r'pages', PageList)
 
 app_name = 'Pages'
 urlpatterns = [
-    path('', include(router.urls)),
-    path('pages/block/', PageBlocking.as_view()),
-    path('pages/unblock/', PageUnblocking.as_view())
+    path('pages/', PageList.as_view({'get': 'list',
+                                     'post': 'create'})),
+    path('page/<int:pk>/', PageList.as_view({'get': 'retrieve',
+                                             'put': 'update',
+                                             'delete': 'destroy'})),
+    path('page/block/', PageList.as_view({'put': 'block'})),
+    path('page/unblock/', PageList.as_view({'put': 'unblock'}))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

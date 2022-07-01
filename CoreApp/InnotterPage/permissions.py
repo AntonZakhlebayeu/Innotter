@@ -17,11 +17,8 @@ class IsInRoleAdminOrModerator(BasePermission):
 
 class IsOwner(BasePermission):
     def has_permission(self, request, view, **kwargs):
-        if request.method == 'GET':
-            try:
-                pk = kwargs['pk']
-            except KeyError:
-                return False
+        if view.kwargs.get('pk') is None or Page.objects.filter(pk=view.kwargs['pk']).first() is None:
+            return False
 
         return request.user.pk == Page.objects.get(pk=view.kwargs['pk']).owner_id
 
@@ -29,10 +26,7 @@ class IsOwner(BasePermission):
 class IsPublicPage(BasePermission):
     def has_permission(self, request, view, **kwargs):
         if request.method == "GET":
-
-            try:
-                pk = kwargs['pk']
-            except KeyError:
+            if view.kwargs.get('pk') is None or Page.objects.filter(pk=view.kwargs['pk']).first() is None:
                 return False
 
             return not Page.objects.get(pk=view.kwargs['pk']).is_private
@@ -42,12 +36,11 @@ class IsPublicPage(BasePermission):
 
 class IsBlockedPage(BasePermission):
     def has_permission(self, request, view, **kwargs):
+
         if request.method == "POST":
             return True
 
-        try:
-            pk = kwargs['pk']
-        except KeyError:
+        if view.kwargs.get('pk') is None:
             return True
 
         if Page.objects.get(pk=view.kwargs['pk']).unblock_date is None:

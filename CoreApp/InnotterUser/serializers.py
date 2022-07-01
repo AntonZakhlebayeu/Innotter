@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
+from InnotterPage.models import Page
+from InnotterTag.serializers import TagPageSerializer
 from InnotterUser.models import User
-from InnotterPage.serializers import SmallPageInfoSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -116,5 +117,18 @@ class UserAdministrateSerializer(UserSerializer):
                   'follows', 'is_blocked']
         read_only_fields = ['email', 'username', 'is_active', 'is_staff', 'role', 'pages', 'refresh_token',
                             'follows']
+
+
+class SmallPageInfoSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = Page
+        fields = ['uuid', 'name', 'owner', 'is_private', 'tags']
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['tags'] = TagPageSerializer(instance.tags.all(), many=True).data
+        return rep
 
 
