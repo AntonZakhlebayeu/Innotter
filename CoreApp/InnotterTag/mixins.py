@@ -28,6 +28,18 @@ class TagMixin(viewsets.GenericViewSet,
 
         return Response(tag_data.data, status=status.HTTP_200_OK)
 
+    def list(self, request, *args, **kwargs):
+        if kwargs.get('pk') is None:
+            return super().list(request, *args, **kwargs)
+
+        if Page.objects.filter(pk=kwargs['pk']).first() is None:
+            return Response({"detail": "Page does not exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        tag_data = TagSerializer(data=Page.objects.get(pk=kwargs['pk']).tags, many=True)
+        tag_data.is_valid()
+
+        return Response(tag_data.data, status=status.HTTP_200_OK)
+
     def destroy(self, request, *args, **kwargs):
         if kwargs.get('pk_tag') is None:
             return super().destroy(request, *args, **kwargs)
