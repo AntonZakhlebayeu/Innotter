@@ -6,6 +6,7 @@ from rest_framework.status import HTTP_200_OK
 from InnotterPage.models import Page
 from subscribe_request.mixins import SubscribeRequestMixin
 from subscribe_request.models import SubscribeRequest
+from subscribe_request.serializers import RetrieveSubscribeRequestSerializer
 from subscribe_request.services import accept_all_subscribe_requests
 
 
@@ -17,6 +18,16 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
         accept_all_subscribe_requests(
             queryset_subscribe_requests=self.get_queryset())
         return Response(status=HTTP_200_OK)
+
+    @action(detail=False, methods=('get',))
+    def get_all_page_subscribe_requests(self, request):
+        requests_queryset = SubscribeRequest.objects.filter(desired_page=request.data.get('desired_page'),
+                                                            is_accepted=False)
+
+        requests = RetrieveSubscribeRequestSerializer(many=True, data=requests_queryset)
+        requests.is_valid()
+
+        return Response(data=requests.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=('patch', ))
     def accept_page_subscribe_requests(self, request):
