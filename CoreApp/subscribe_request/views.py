@@ -21,8 +21,17 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
     @action(detail=False, methods=('patch', ))
     def accept_page_subscribe_requests(self, request):
         accept_all_subscribe_requests(
-            queryset_subscribe_requests=SubscribeRequest.objects.filter(desired_page=request.data.get('desired_page')))
+            queryset_subscribe_requests=SubscribeRequest.objects.filter(desired_page=request.data.get('desired_page'),
+                                                                        is_accepted=False))
         return Response(status=HTTP_200_OK)
+
+    @action(detail=False, methods=('delete',))
+    def decline_page_subscribe_requests(self, request):
+        subscribe_requests = SubscribeRequest.objects.filter(desired_page=request.data.get('desired_page',),
+                                                             is_accepted=False)
+        subscribe_requests.delete()
+
+        return Response({"detail": "Declined."}, status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=('delete', ))
     def delete_users_from_followers(self, request):

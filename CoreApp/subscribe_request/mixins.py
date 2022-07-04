@@ -46,10 +46,11 @@ class SubscribeRequestMixin(
         'partial_update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), IsBlockedPageUpdate, ),
         'retrieve': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), IsBlockedPageUpdate, ),
         'list': (IsAuthenticated, IsInRoleAdminOrModerator, ),
-        'destroy': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+        'destroy': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests), ),
         'accept_subscribe_requests': (IsAuthenticated, IsInRoleAdminOrModerator, ),
         'accept_page_subscribe_requests': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
         'delete_users_from_followers': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
+        'decline_page_subscribe_requests': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
     }
 
     def perform_create(self, serializer):
