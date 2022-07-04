@@ -51,6 +51,7 @@ class SubscribeRequestMixin(
         'accept_page_subscribe_requests': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
         'delete_users_from_followers': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
         'decline_page_subscribe_requests': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
+        'get_all_page_subscribe_requests': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),),
     }
 
     def perform_create(self, serializer):
