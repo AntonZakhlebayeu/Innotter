@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from InnotterUser.serializers import UsernameSerializer
-from InnotterTag.serializers import TagPageSerializer, TagSerializer
+from InnotterTag.serializers import TagPageSerializer
 from InnotterPage.models import Page
 
 

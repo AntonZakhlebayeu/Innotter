@@ -10,7 +10,6 @@ class Page(models.Model):
     followers = models.ManyToManyField('InnotterUser.User', related_name='follows', blank=True)
     image = models.URLField(null=True, blank=True)
     is_private = models.BooleanField(default=False)
-    follow_requests = models.ManyToManyField('InnotterUser.User', related_name='requests')
     unblock_date = models.DateTimeField(null=True, blank=True)
 
 

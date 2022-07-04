@@ -6,4 +6,5 @@ urlpatterns = [
     path('api/', include('InnotterUser.urls', namespace='authentication')),
     path('api/', include('InnotterPage.urls', namespace='pages')),
     path('api/', include('InnotterTag.urls', namespace='tags')),
+    path('api/', include('subscribe_request.urls', namespace='subscribe_requests'))
 ]
