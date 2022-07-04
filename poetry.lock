@@ -1,4 +1,12 @@
 [[package]]
+name = "admin"
+version = "0.0.1"
+description = "Develop soon"
+category = "main"
+optional = false
+python-versions = ">=3.3.0"
+
+[[package]]
 name = "asgiref"
 version = "3.5.2"
 description = "ASGI specs, helper code, and adapters"
@@ -152,6 +160,14 @@ python-versions = "*"
 tree = "*"
 
 [[package]]
+name = "replies"
+version = "0.0.1"
+description = "Composable, pure, immutable toolkit for HTTP APIs"
+category = "main"
+optional = false
+python-versions = ">=3.9,<4.0"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -211,9 +227,13 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "09466bd33869a44bafe0b81f7e9dd0a2204a042627d646efdd906a42756acc4a"
+content-hash = "26a6a94cd483a2e6c5697cf77faa45a9d2ff24c5605dfb9e390cceaa6a02ea5f"
 
 [metadata.files]
+admin = [
+    {file = "admin-0.0.1-py3-none-any.whl", hash = "sha256:4b026b98b27ae90ead73a37cc27ca112b6247a2a03f8c72c8b8e3bdc05d41051"},
+    {file = "admin-0.0.1.tar.gz", hash = "sha256:8824b40d42f345e0cf30476aea499b69d25793ab8bc37c5b07e1d4a6d814876f"},
+]
 asgiref = [
     {file = "asgiref-3.5.2-py3-none-any.whl", hash = "sha256:1d2880b792ae8757289136f1db2b7b99100ce959b2aa57fd69dab783d05afac4"},
     {file = "asgiref-3.5.2.tar.gz", hash = "sha256:4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424"},
@@ -344,6 +364,10 @@ pyyaml = [
 ]
 reference = [
     {file = "reference-0.0.3.tar.gz", hash = "sha256:705f98310646c25e016e38a361231c6b2bd1ba538ce2e445a1e51cdb662f0864"},
+]
+replies = [
+    {file = "replies-0.0.1-py3-none-any.whl", hash = "sha256:c6ebe786d088ae65542f333297ace38a344b7bbf3a357d3db603c1f1d758af08"},
+    {file = "replies-0.0.1.tar.gz", hash = "sha256:152fd543365be1faac9b411e46acdfc1d178d360598281503fe620c85609be4d"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},

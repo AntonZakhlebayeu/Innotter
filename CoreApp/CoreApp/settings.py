@@ -14,6 +14,7 @@ DEBUG = True
 ALLOWED_HOSTS = [os.getenv("DJANGO_ALLOWED_HOSTS")]
 
 INSTALLED_APPS = [
+    'innotter_post.apps.InnotterPostConfig',
     'subscribe_request.apps.SubscribeRequestConfig',
     'InnotterUser.apps.InnotterUserConfig',
     'InnotterPage.apps.InnotterPageConfig',
