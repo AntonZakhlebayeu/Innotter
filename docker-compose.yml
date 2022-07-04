@@ -1,0 +1,28 @@
+version: '3.10'
+services:
+  web:
+    restart: always
+    volumes:
+      - ./CoreApp:/app
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    entrypoint:
+      - ./django-entrypoint.sh
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
