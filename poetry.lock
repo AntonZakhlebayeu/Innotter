@@ -80,6 +80,25 @@ PyYAML = ">=6.0,<7.0"
 stevedore = ">=1.29.0,<1.30.0"
 
 [[package]]
+name = "kw"
+version = "0.0.2"
+description = "Utils to work with storage"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "kwargs"
+version = "1.0.1"
+description = "Python micro-framework"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+test = ["pytest", "pylint", "pytest-cov"]
+
+[[package]]
 name = "pbr"
 version = "5.9.0"
 description = "Python Build Reasonableness"
@@ -227,7 +246,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "26a6a94cd483a2e6c5697cf77faa45a9d2ff24c5605dfb9e390cceaa6a02ea5f"
+content-hash = "5b15a78739118948b0df35ecd44c6881b9b7086a46ef8dda2664a717e5bd3c8b"
 
 [metadata.files]
 admin = [
@@ -257,6 +276,14 @@ djangorestframework = [
 eastern = [
     {file = "eastern-5.0.0-py3-none-any.whl", hash = "sha256:82a49518a1657713e299a743b5a08414261194363292390c3a05e3fc3608da60"},
     {file = "eastern-5.0.0.tar.gz", hash = "sha256:a1b0454065bc58661ab9187449d1d44a72d36ede4612b3f7ba986456f02838b8"},
+]
+kw = [
+    {file = "kw-0.0.2-py3-none-any.whl", hash = "sha256:c552622b384e79dd1fe3e2c35a6503e310d3ee6379c8b810c73cd65de5fcb528"},
+    {file = "kw-0.0.2.tar.gz", hash = "sha256:48f3e45ef7cdbdfebe2dd0280fc501dfba413e2b128a609134d8b0aef23db25c"},
+]
+kwargs = [
+    {file = "kwargs-1.0.1-py3-none-any.whl", hash = "sha256:f553495d7dfc7b9ec335d572d93ce723cc6de4917a5d135cbc84c2d772b7139f"},
+    {file = "kwargs-1.0.1.tar.gz", hash = "sha256:2557e7b3e3c9317fb64079c06664a5f1ce9be342e04ee295375d91eef63a5e31"},
 ]
 pbr = [
     {file = "pbr-5.9.0-py2.py3-none-any.whl", hash = "sha256:e547125940bcc052856ded43be8e101f63828c2d94239ffbe2b327ba3d5ccf0a"},

@@ -12,6 +12,8 @@ class IsInRoleAdminOrModerator(BasePermission):
         if request.method == "POST":
             return True
         else:
+            print("Works IsInRoleAdminOrModerator")
+            print(request.method)
             return request.user.role == Roles.ADMIN or request.user.role == Roles.MODERATOR
 
 
@@ -19,6 +21,8 @@ class IsOwner(BasePermission):
     def has_permission(self, request, view, **kwargs):
         if view.kwargs.get('pk') is None or Page.objects.filter(pk=view.kwargs['pk']).first() is None:
             return False
+
+        print("Works IsOwner")
 
         return request.user.pk == Page.objects.get(pk=view.kwargs['pk']).owner_id
 
@@ -29,7 +33,10 @@ class IsPublicPage(BasePermission):
             if view.kwargs.get('pk') is None or Page.objects.filter(pk=view.kwargs['pk']).first() is None:
                 return False
 
-            return not Page.objects.get(pk=view.kwargs['pk']).is_private
+            page = Page.objects.get(pk=view.kwargs['pk'])
+            print(not page.is_private)
+            print(page.followers.contains(request.user))
+            return not page.is_private or page.followers.contains(request.user)
         else:
             return False
 

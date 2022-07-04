@@ -20,7 +20,6 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
 
 class UpdatePostSerializer(serializers.ModelSerializer):
-    page = serializers.ReadOnlyField(source='page.uuid')
 
     class Meta:
         model = Post

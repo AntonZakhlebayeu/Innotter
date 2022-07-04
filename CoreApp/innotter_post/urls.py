@@ -9,8 +9,10 @@ router = DefaultRouter()
 app_name = 'posts'
 
 urlpatterns = [
-    path('posts/<int:pk>/', PostViewSet.as_view({'get': 'retrieve',
-                                                 'post': 'create'})),
-    path('posts/page/<int:pk>', PostViewSet.as_view({'get': 'list'})),
-    path('posts/', PostViewSet.as_view({'get': 'list'})),
+    path('posts/page/<int:pk_page>/', PostViewSet.as_view({'get': 'list',
+                                                           'post': 'create'})),
+    path('posts/page/<int:pk_page>/post/<int:pk>/', PostViewSet.as_view({'get': 'retrieve',
+                                                                         'put': 'update',
+                                                                         'delete': 'destroy'})),
+    path('posts/get_all_posts/', PostViewSet.as_view({'get': 'get_all_posts'}))
 ]
