@@ -99,6 +99,25 @@ python-versions = "*"
 test = ["pytest", "pylint", "pytest-cov"]
 
 [[package]]
+name = "modcall"
+version = "0.1.0"
+description = "Create callable modules"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[[package]]
+name = "namespace"
+version = "0.1.4"
+description = "Simple namespaces"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+modcall = ">=0.1.0,<0.2.0"
+
+[[package]]
 name = "pbr"
 version = "5.9.0"
 description = "Python Build Reasonableness"
@@ -246,7 +265,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "5b15a78739118948b0df35ecd44c6881b9b7086a46ef8dda2664a717e5bd3c8b"
+content-hash = "68a51bcf373530a636bb6e16a62eafece5e6ba4fc2cf168de8d7d5846ade7b84"
 
 [metadata.files]
 admin = [
@@ -284,6 +303,14 @@ kw = [
 kwargs = [
     {file = "kwargs-1.0.1-py3-none-any.whl", hash = "sha256:f553495d7dfc7b9ec335d572d93ce723cc6de4917a5d135cbc84c2d772b7139f"},
     {file = "kwargs-1.0.1.tar.gz", hash = "sha256:2557e7b3e3c9317fb64079c06664a5f1ce9be342e04ee295375d91eef63a5e31"},
+]
+modcall = [
+    {file = "modcall-0.1.0-py3-none-any.whl", hash = "sha256:c7412e325bd715489d8c8d72f68eba6c2c9197ea3befb84f850012640beb8a7b"},
+    {file = "modcall-0.1.0.tar.gz", hash = "sha256:a02a90ff1782018b2b29052a1cd05997cb326b35ed10ade987f3b982b3da648c"},
+]
+namespace = [
+    {file = "namespace-0.1.4-py3-none-any.whl", hash = "sha256:1ecc107623193f7ca9df8fe190e85e798b59c2bb93fa34d7cad41a6ed4403a3f"},
+    {file = "namespace-0.1.4.tar.gz", hash = "sha256:e909e18270ef63d36681b5cf618ef6ae4f9192d69a577bcddc49631d46692bf3"},
 ]
 pbr = [
     {file = "pbr-5.9.0-py2.py3-none-any.whl", hash = "sha256:e547125940bcc052856ded43be8e101f63828c2d94239ffbe2b327ba3d5ccf0a"},

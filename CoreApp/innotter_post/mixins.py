@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from innotter_post.permissions import IsInRoleAdminOrModerator, IsOwner, IsPublicPage
+from innotter_post.permissions import IsInRoleAdminOrModerator, IsOwner, IsPublicPage, IsBlockedPage
 from innotter_post.models import Post
 from innotter_post.serializers import CreatePostSerializer, UpdatePostSerializer, RetrievePostSerializer, \
     ListPostSerializer
@@ -27,13 +27,13 @@ class PostMixin(GenericViewSet,
     }
 
     permission_classes = {
-        'create': (IsAuthenticated & (IsInRoleAdminOrModerator | IsOwner),),
-        'update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), ),
-        'partial_update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), ),
-        'retrieve': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner | IsPublicPage), ),
-        'list': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner | IsPublicPage), ),
-        'destroy': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), ),
-        'get_all_posts': (IsAuthenticated, IsInRoleAdminOrModerator, )
+        'create': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),),
+        'update': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner), ),
+        'partial_update': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner), ),
+        'retrieve': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner | IsPublicPage), ),
+        'list': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner | IsPublicPage), ),
+        'destroy': (IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner), ),
+        'get_all_posts': (IsAuthenticated, IsInRoleAdminOrModerator, IsBlockedPage, )
     }
 
     def retrieve(self, request, *args, **kwargs):

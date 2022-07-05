@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.db import models
+from pytz import UTC
 
 
 class Page(models.Model):
@@ -11,3 +14,12 @@ class Page(models.Model):
     image = models.URLField(null=True, blank=True)
     is_private = models.BooleanField(default=False)
     unblock_date = models.DateTimeField(null=True, blank=True)
+    is_permanent_blocked = models.BooleanField(default=False)
+
+    def is_temporary_blocked(self):
+        if self.unblock_date is None:
+            return True
+
+        utc_now = datetime.utcnow().replace(tzinfo=UTC)
+        utc_unblock_date = self.unblock_date.replace(tzinfo=UTC)
+        return utc_now > utc_unblock_date

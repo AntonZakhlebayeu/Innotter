@@ -4,13 +4,12 @@ from rest_framework.permissions import IsAuthenticated
 from InnotterTag.mixins import TagMixin
 from InnotterTag.models import Tag
 from InnotterTag.serializers import TagSerializer
-from InnotterPage.permissions import IsInRoleAdminOrModerator, IsOwner, IsPublicPage
+from InnotterPage.permissions import IsInRoleAdminOrModerator
 
 
 class TagList(TagMixin):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (IsAuthenticated & (IsPublicPage | IsInRoleAdminOrModerator | IsOwner),)
 
     @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated & IsInRoleAdminOrModerator, ])
     def get_tag(self, request, *args, **kwargs):

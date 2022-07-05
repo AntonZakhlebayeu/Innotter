@@ -1,9 +1,11 @@
 from rest_framework import status, viewsets
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, DestroyModelMixin, CreateModelMixin, \
     UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from InnotterPage.models import Page
+from InnotterPage.permissions import IsBlockedPage, IsInRoleAdminOrModerator, IsOwner, IsPublicPage
 from InnotterTag.models import Tag
 from InnotterTag.serializers import TagSerializer
 
@@ -14,6 +16,18 @@ class TagMixin(viewsets.GenericViewSet,
                UpdateModelMixin,
                RetrieveModelMixin,
                DestroyModelMixin):
+
+    permission_classes = {
+        'create': (IsAuthenticated, (IsOwner | IsInRoleAdminOrModerator), IsBlockedPage, ),
+        'retrieve': (IsAuthenticated, (IsPublicPage | IsOwner | IsInRoleAdminOrModerator), IsBlockedPage,),
+        'update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), IsBlockedPage,),
+        'partial_update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), IsBlockedPage,),
+        'destroy': (IsAuthenticated, (IsOwner | IsInRoleAdminOrModerator), IsBlockedPage,),
+        'list': (IsAuthenticated, (IsPublicPage | IsOwner | IsInRoleAdminOrModerator), IsBlockedPage,),
+        'get_tag': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+        'all': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+        'delete_tag': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+    }
 
     def retrieve(self, request, *args, **kwargs):
         if kwargs.get('pk_tag') is None:
@@ -52,3 +66,7 @@ class TagMixin(viewsets.GenericViewSet,
         Page.objects.get(pk=kwargs['pk']).tags.remove(Tag.objects.get(pk=kwargs['pk_tag']))
 
         return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+    def get_permissions(self):
+        permissions_classes = self.permission_classes.get(self.action)
+        return [permission() for permission in permissions_classes]

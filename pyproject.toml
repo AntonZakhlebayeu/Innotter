@@ -17,6 +17,7 @@ admin = "^0.0.1"
 replies = "^0.0.1"
 kw = "^0.0.2"
 kwargs = "^1.0.1"
+namespace = "^0.1.4"
 
 [tool.poetry.dev-dependencies]
 

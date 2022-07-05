@@ -13,8 +13,16 @@ from InnotterPage.utils import time_converter
 
 class PageList(viewsets.ModelViewSet):
     serializer_class = PageSerializer
-    permission_classes = (IsAuthenticated, (IsInRoleAdminOrModerator | IsPublicPage | IsOwner), IsBlockedPage, )
     queryset = Page.objects.all()
+    permission_classes = {
+        'create': (IsAuthenticated,),
+        'retrieve': (IsAuthenticated, (IsPublicPage | IsOwner | IsInRoleAdminOrModerator), IsBlockedPage,),
+        'update': (IsAuthenticated, (IsInRoleAdminOrModerator | IsOwner), IsBlockedPage,),
+        'destroy': (IsAuthenticated, (IsOwner | IsInRoleAdminOrModerator), IsBlockedPage,),
+        'list': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+        'block': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+        'unblock': (IsAuthenticated, IsInRoleAdminOrModerator, ),
+    }
 
     @action(detail=True, methods=['put'], permission_classes=[IsAuthenticated & IsInRoleAdminOrModerator, ])
     def block(self, request, *args, **kwargs):
@@ -38,3 +46,7 @@ class PageList(viewsets.ModelViewSet):
         page_model.save()
 
         return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
+
+    def get_permissions(self):
+        permissions_classes = self.permission_classes.get(self.action)
+        return [permission() for permission in permissions_classes]

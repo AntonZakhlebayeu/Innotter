@@ -14,9 +14,6 @@ class IsOwner(BasePermission):
         if request.method == 'POST':
             return request.user.pk == Page.objects.get(pk=view.kwargs['pk']).owner_id
 
-        print(request.user.pk)
-        print(Page.objects.get(pk=view.kwargs['pk_page']).owner_id)
-        print(request.user.pk == Page.objects.get(pk=view.kwargs['pk_page']).owner_id)
         return request.user.pk == Page.objects.get(pk=view.kwargs['pk_page']).owner_id
 
 
@@ -27,3 +24,9 @@ class IsPublicPage(BasePermission):
             return not page.is_private or page.followers.contains(request.user)
         else:
             return False
+
+
+class IsBlockedPage(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return not obj.page.is_permanent_blocked and \
+               obj.page.check_temporary_block()
