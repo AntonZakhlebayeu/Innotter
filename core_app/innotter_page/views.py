@@ -60,12 +60,11 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
             "page",
         )
 
+        page_model = Page.objects.get(uuid=page["uuid"])
         if page.get("permanent_block") is None:
-            page_model = Page.objects.get(uuid=page["uuid"])
             time = page["block_time"].split()
             page_model.unblock_date = datetime.now() + time_converter(time)
         else:
-            page_model = Page.objects.get(uuid=page["uuid"])
             page_model.is_permanent_blocked = True
 
         page_model.save()
@@ -85,8 +84,11 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
         )
 
         page_model = Page.objects.get(uuid=page["uuid"])
+        if page.get("permanent_block") is None:
+            page_model.unblock_date = datetime.now()
+        else:
+            page_model.is_permanent_blocked = False
 
-        page_model.unblock_date = datetime.now()
         page_model.save()
 
         return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
