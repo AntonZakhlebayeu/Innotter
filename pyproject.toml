@@ -13,11 +13,7 @@ psycopg2 = "^2.9.3"
 PyJWT = "^2.4.0"
 reference = "^0.0.3"
 eastern = "^5.0.0"
-admin = "^0.0.1"
-replies = "^0.0.1"
-kw = "^0.0.2"
-kwargs = "^1.0.1"
-namespace = "^0.1.4"
+drf-nested-routers = "^0.93.4"
 
 [tool.poetry.dev-dependencies]
 

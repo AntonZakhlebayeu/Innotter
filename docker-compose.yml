@@ -3,7 +3,7 @@ services:
   web:
     restart: always
     volumes:
-      - ./CoreApp:/app
+      - ./core_app:/app
     build:
       context: .
     ports:
