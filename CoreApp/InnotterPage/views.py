@@ -28,9 +28,13 @@ class PageList(viewsets.ModelViewSet):
     def block(self, request, *args, **kwargs):
         page = request.data.get('page', )
 
-        page_model = Page.objects.get(uuid=page['uuid'])
-        time = page['block_time'].split()
-        page_model.unblock_date = datetime.now() + time_converter(time)
+        if page.get('permanent_block') is None:
+            page_model = Page.objects.get(uuid=page['uuid'])
+            time = page['block_time'].split()
+            page_model.unblock_date = datetime.now() + time_converter(time)
+        else:
+            page_model = Page.objects.get(uuid=page['uuid'])
+            page_model.is_permanent_blocked = True
 
         page_model.save()
 
