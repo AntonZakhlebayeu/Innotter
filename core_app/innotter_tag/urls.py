@@ -1,17 +1,18 @@
-from django.urls import path
+from django.urls import include, path
+from innotter_page.views import PageList
 from innotter_tag.views import TagList
-from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import SimpleRouter
+from rest_framework_nested import routers
 
-app_name = "Tags"
+router = SimpleRouter()
+router.register("pages", PageList)
+
+tags_router = routers.NestedSimpleRouter(router, r"pages", lookup="pages")
+
+tags_router.register(r"tags", TagList, basename="page")
+
+app_name = "tags"
+
 urlpatterns = [
-    path(
-        "page/<int:pk>/tag/<int:pk_tag>/",
-        TagList.as_view({"get": "retrieve", "delete": "destroy"}),
-    ),
-    path("page/<int:pk>/tags/", TagList.as_view({"get": "list", "post": "create"})),
-    path("tag/get_tag/<int:pk>/", TagList.as_view({"get": "get_tag"})),
-    path("tags/all/", TagList.as_view({"get": "all"})),
-    path("tag/delete_tag/<int:pk>/", TagList.as_view({"delete": "delete_tag"})),
+    path("", include(tags_router.urls)),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
