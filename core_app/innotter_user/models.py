@@ -95,8 +95,6 @@ class User(AbstractUser, PermissionsMixin):
     def _generate_refresh_token(self):
         dt = datetime.now() + timedelta(hours=5)
 
-        print(settings.SECRET_KEY)
-
         token = jwt.encode(
             {"exp": int(dt.strftime("%s"))},
             settings.SECRET_KEY,
