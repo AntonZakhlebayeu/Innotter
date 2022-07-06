@@ -10,7 +10,9 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         kwargs = self.context.get("request").parser_context["kwargs"]
-        validated_data["page"] = Page.objects.get(pk=kwargs["pages_pk"])
+        page = Page.objects.get(pk=kwargs["pages_pk"])
+        print(page.followers.count())
+        validated_data["page"] = page
 
         post = Post.objects.create(**validated_data)
 
