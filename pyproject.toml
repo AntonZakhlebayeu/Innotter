@@ -18,6 +18,11 @@ rabbitmq = "^0.2.0"
 black = "^22.6.0"
 flake8 = "^4.0.1"
 isort = "^5.10.1"
+pytest = "^7.1.2"
+pytest-django = "^4.5.2"
+pytest-factoryboy = "^2.5.0"
+model-bakery = "^1.6.0"
+apiclient = "^1.0.4"
 
 [tool.poetry.dev-dependencies]
 
