@@ -4,18 +4,16 @@ import pytest
 from innotter_page.serializers import PageSerializer
 from innotter_user.models import User
 from innotter_user.serializers import UsernameSerializer
-from innotter_user.views import (
-    LoginAPIView,
-    RegistrationAPIView,
-    UserRetrieveUpdateAPIView,
-)
+from innotter_user.views import LoginAPIView, RegistrationAPIView, UsersAPIView
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 api_factory = APIRequestFactory()
 register_view = RegistrationAPIView.as_view()
 login_view = LoginAPIView.as_view()
-retrieve_view = UserRetrieveUpdateAPIView.as_view()
+users_view = UsersAPIView.as_view(
+    {"get": "retrieve", "put": "update", "delete": "destroy"}
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -102,16 +100,27 @@ class TestUserEndpoints:
             "is_blocked": user.is_blocked,
         }
 
-        request = api_factory.get(
-            f"{self.endpoint}/{user.pk}/", extra=user.access_token
-        )
+        request = api_factory.get(f"{self.endpoint}/{user.pk}/")
         force_authenticate(request, user=user, token=user.access_token)
         request.COOKIES["access_token"] = user.access_token
         request.COOKIES["refresh_token"] = user.refresh_token
 
-        response = retrieve_view(request)
+        response = users_view(request)
         expected_json["access_token"] = user.access_token
 
         assert response.status_code == 200
         assert response.data == expected_json
         assert response.cookies["access_token"].value == user.access_token
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_delete(self):
+        user = baker.make(User)
+        user.role = "admin"
+
+        request = api_factory.delete(f"{self.endpoint}/{user.pk}/")
+
+        force_authenticate(request, user=user, token=user.access_token)
+        response = users_view(request, pk=user.pk)
+
+        assert response.status_code == 204
+        assert User.objects.all().count() == 0
