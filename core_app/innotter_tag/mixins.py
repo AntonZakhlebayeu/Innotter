@@ -8,6 +8,7 @@ from innotter_page.permissions import (
 from innotter_tag.models import Tag
 from innotter_tag.serializers import TagSerializer
 from rest_framework import status, viewsets
+from rest_framework.exceptions import NotFound
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
@@ -86,23 +87,6 @@ class TagMixin(
 
         return Response(tag_data.data, status=status.HTTP_200_OK)
 
-    def list(self, request, *args, **kwargs):
-        if kwargs.get("pk") is None:
-            return super().list(request, *args, **kwargs)
-
-        if Page.objects.filter(pk=kwargs["pages_pk"]).first() is None:
-            return Response(
-                {"detail": "Page does not exists."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        tag_data = TagSerializer(
-            data=Page.objects.get(pk=kwargs["pages_pk"]).tags, many=True
-        )
-        tag_data.is_valid()
-
-        return Response(tag_data.data, status=status.HTTP_200_OK)
-
     def destroy(self, request, *args, **kwargs):
         if kwargs.get("pk") is None:
             return super().destroy(request, *args, **kwargs)
@@ -128,3 +112,11 @@ class TagMixin(
         return Response(
             {"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT
         )
+
+    def get_queryset(self, *args, **kwargs):
+        pages_id = self.kwargs.get("pages_pk")
+        try:
+            page = Page.objects.get(pk=pages_id)
+        except Page.DoesNotExist:
+            raise NotFound("A page with this id does not exist")
+        return self.queryset.filter(pages=page)
