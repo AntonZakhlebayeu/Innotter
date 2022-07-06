@@ -11,7 +11,7 @@ from innotter_user.serializers import (
     UserSerializer,
 )
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,10 +76,33 @@ class LoginAPIView(APIView):
         return response
 
 
-class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+class UserUpdateAPIView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer_data = request.data.get(
+            "user",
+        )
+
+        serializer = self.serializer_class(
+            request.user, data=serializer_data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UsersAPIView(UserMixin):
+    permission_classes = (
+        IsAuthenticated,
+        IsInRoleAdmin,
+    )
+    serializer_class = UserSerializer
+
+    queryset = User.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(request.user)
@@ -98,25 +121,11 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         )
 
         serializer = self.serializer_class(
-            request.user, data=serializer_data, partial=True
+            User.objects.get(pk=kwargs.get("pk")),
+            data=serializer_data,
+            partial=True,
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        access_token = request.COOKIES["access_token"]
-        response_dict = {"access_token": access_token}
-        response_dict.update(serializer.data)
-        response = Response(response_dict, status=status.HTTP_200_OK)
-        response.set_cookie("access_token", access_token, httponly=True)
-
-        return response
-
-
-class UsersAllAPIView(UserMixin):
-    permission_classes = (
-        IsAuthenticated,
-        IsInRoleAdmin,
-    )
-    serializer_class = UserAdministrateSerializer
-
-    queryset = User.objects.all()
+        return Response(serializer.data, status=status.HTTP_200_OK)
