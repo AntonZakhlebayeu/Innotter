@@ -4,12 +4,16 @@ repos:
     hooks:
     - id: black
       language_version: python3.10.4
+      entry: black Innotter
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
     - id: flake8
+      entry: flake8 Innotter
+
 -   repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
       - id: isort
         name: isort (python)
+        entry: isort Innotter
