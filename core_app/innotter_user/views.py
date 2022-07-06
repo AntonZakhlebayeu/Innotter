@@ -4,9 +4,12 @@ from innotter_user.mixins import UserMixin
 from innotter_user.models import User
 from innotter_user.permissions import IsInRoleAdmin
 from innotter_user.renderers import UserJSONRenderer
-from innotter_user.serializers import (LoginSerializer, RegistrationSerializer,
-                                       UserAdministrateSerializer,
-                                       UserSerializer)
+from innotter_user.serializers import (
+    LoginSerializer,
+    RegistrationSerializer,
+    UserAdministrateSerializer,
+    UserSerializer,
+)
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -40,14 +43,13 @@ class LoginAPIView(APIView):
         user = request.data.get(
             "user",
         )
-
         user_model = User.objects.get(email=user["email"])
 
         if user_model.is_blocked:
             return Response(
-                {"detail": "You are blocked."}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "You are blocked."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-
         user_model.last_login = datetime.now()
         user_model.save()
 
