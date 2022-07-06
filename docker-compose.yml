@@ -15,6 +15,12 @@ services:
     depends_on:
       - db
 
+  rabbit:
+    image: rabbitmq:3.10.5-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   db:
     image: postgres:13.0-alpine
     volumes:
@@ -23,6 +29,20 @@ services:
       - ./.env
     ports:
       - "5432:5432"
+
+  celery:
+    volumes:
+      - ./core_app:/app
+    build:
+      context: .
+    env_file:
+      - ./.env
+    entrypoint:
+      - ./celery-entrypoint.sh
+    depends_on:
+      - rabbit
+      - db
+      - web
 
 volumes:
   postgres_data:
