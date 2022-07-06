@@ -41,8 +41,9 @@ class TestUserEndpoints:
 
         response = register_view(request)
         user_json["user"].pop("password")
-        user_json["user"]["access_token"] = User.objects.first().access_token
-        user_json["user"]["refresh_token"] = User.objects.first().refresh_token
+        user = User.objects.first()
+        user_json["user"]["access_token"] = user.access_token
+        user_json["user"]["refresh_token"] = user.refresh_token
 
         assert response.data == user_json.get("user")
         assert response.status_code == 201
