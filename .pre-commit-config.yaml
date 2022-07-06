@@ -1,19 +1,28 @@
 repos:
--   repo: https://github.com/psf/black
-    rev: stable
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
     hooks:
-    - id: black
-      language_version: python3.10.4
-      entry: black Innotter
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.9
-    hooks:
-    - id: flake8
-      entry: flake8 Innotter
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
 
--   repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+-   repo: https://github.com/asottile/seed-isort-config
+    rev: v1.9.3
     hooks:
-      - id: isort
-        name: isort (python)
-        entry: isort Innotter
+    -   id: seed-isort-config
+
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: ''
+    hooks:
+    -   id: isort
+
+-   repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+    -    id: black
+         language_version: python3.10
+
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8

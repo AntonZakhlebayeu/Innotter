@@ -1,8 +1,12 @@
 from datetime import datetime
 
 from innotter_page.models import Page
-from innotter_page.permissions import (IsBlockedPage, IsInRoleAdminOrModerator,
-                                       IsOwner, IsPublicPage)
+from innotter_page.permissions import (
+    IsBlockedPage,
+    IsInRoleAdminOrModerator,
+    IsOwner,
+    IsPublicPage,
+)
 from innotter_page.serializers import PageSerializer
 from innotter_page.utils import time_converter
 from rest_framework import status, viewsets
@@ -51,16 +55,21 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=["put"],
-        permission_classes=[
-            IsAuthenticated & IsInRoleAdminOrModerator,
-        ],
+        permission_classes=(
+            {
+                "block": (
+                    IsAuthenticated,
+                    IsInRoleAdminOrModerator,
+                ),
+            }
+        ),
     )
     def block(self, request, *args, **kwargs):
         page = request.data.get(
             "page",
         )
 
-        page_model = Page.objects.get(uuid=page["uuid"])
+        page_model = Page.objects.get(pk=kwargs["pk"])
         if page.get("permanent_block") is None:
             time = page["block_time"].split()
             page_model.unblock_date = datetime.now() + time_converter(time)
@@ -69,21 +78,28 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
 
         page_model.save()
 
-        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
+        return Response(
+            PageSerializer(page_model).data, status=status.HTTP_200_OK
+        )
 
     @action(
         detail=True,
         methods=["put"],
-        permission_classes=[
-            IsAuthenticated & IsInRoleAdminOrModerator,
-        ],
+        permission_classes=(
+            {
+                "unblock": (
+                    IsAuthenticated,
+                    IsInRoleAdminOrModerator,
+                ),
+            }
+        ),
     )
     def unblock(self, request, *args, **kwargs):
         page = request.data.get(
             "page",
         )
 
-        page_model = Page.objects.get(uuid=page["uuid"])
+        page_model = Page.objects.get(pk=kwargs["pk"])
         if page.get("permanent_block") is None:
             page_model.unblock_date = datetime.now()
         else:
@@ -91,4 +107,6 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
 
         page_model.save()
 
-        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
+        return Response(
+            PageSerializer(page_model).data, status=status.HTTP_200_OK
+        )
