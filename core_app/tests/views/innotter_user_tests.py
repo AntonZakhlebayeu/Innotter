@@ -4,14 +4,14 @@ import pytest
 from innotter_page.serializers import PageSerializer
 from innotter_user.models import User
 from innotter_user.serializers import UsernameSerializer
-from innotter_user.views import LoginAPIView, RegistrationAPIView, UsersAPIView
+from innotter_user.views import UserViewSet
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 api_factory = APIRequestFactory()
-register_view = RegistrationAPIView.as_view()
-login_view = LoginAPIView.as_view()
-users_view = UsersAPIView.as_view(
+register_view = UserViewSet.as_view({"post": "register"})
+login_view = UserViewSet.as_view({"post": "login"})
+users_view = UserViewSet.as_view(
     {"get": "retrieve", "put": "update", "delete": "destroy"}
 )
 
@@ -88,6 +88,8 @@ class TestUserEndpoints:
     def test_retrieve(self):
         user = baker.make(User)
         user.role = "admin"
+        user.save()
+
         expected_json = {
             "email": user.email,
             "username": user.username,
@@ -100,12 +102,12 @@ class TestUserEndpoints:
             "is_blocked": user.is_blocked,
         }
 
-        request = api_factory.get(f"{self.endpoint}/{user.pk}/")
+        request = api_factory.get(f"{self.endpoint}{user.pk}/")
         force_authenticate(request, user=user, token=user.access_token)
         request.COOKIES["access_token"] = user.access_token
         request.COOKIES["refresh_token"] = user.refresh_token
 
-        response = users_view(request)
+        response = users_view(request, pk=user.pk)
         expected_json["access_token"] = user.access_token
 
         assert response.status_code == 200

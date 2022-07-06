@@ -1,4 +1,4 @@
-from innotter_page.permissions import IsInRoleAdminOrModerator
+from innotter_page.permissions import IsInStaff
 from innotter_tag.mixins import TagMixin
 from innotter_tag.models import Tag
 from innotter_tag.serializers import TagSerializer
@@ -14,7 +14,7 @@ class TagList(TagMixin):
         detail=True,
         methods=["get"],
         permission_classes=[
-            IsAuthenticated & IsInRoleAdminOrModerator,
+            IsAuthenticated & IsInStaff,
         ],
     )
     def get_tag(self, request, *args, **kwargs):
@@ -24,7 +24,7 @@ class TagList(TagMixin):
         detail=True,
         methods=["put"],
         permission_classes=[
-            IsAuthenticated & IsInRoleAdminOrModerator,
+            IsAuthenticated & IsInStaff,
         ],
     )
     def all(self, request, *args, **kwargs):
@@ -34,7 +34,7 @@ class TagList(TagMixin):
         detail=True,
         methods=["delete"],
         permission_classes=[
-            IsAuthenticated & IsInRoleAdminOrModerator,
+            IsAuthenticated & IsInStaff,
         ],
     )
     def delete_tag(self, request, *args, **kwargs):

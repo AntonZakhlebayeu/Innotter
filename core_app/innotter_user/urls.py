@@ -1,26 +1,14 @@
-from django.urls import path
+from django.urls import include, path
+from innotter_user.views import UserViewSet
+from rest_framework.routers import SimpleRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from .views import (
-    LoginAPIView,
-    RegistrationAPIView,
-    UsersAPIView,
-    UserUpdateAPIView,
-)
+router = SimpleRouter()
+router.register("users", UserViewSet)
 
-app_name = "InnoterUser"
+app_name = "Users"
 urlpatterns = [
-    path("users/", RegistrationAPIView.as_view()),
-    path("users/login/", LoginAPIView.as_view()),
-    path(
-        "users/<int:pk>/",
-        UsersAPIView.as_view(
-            {"get": "retrieve", "put": "update", "delete": "destroy"}
-        ),
-    ),
-    path("users/all/", UsersAPIView.as_view({"get": "list"})),
-    path("users/<int:pk>/block/", UsersAPIView.as_view({"put": "update"})),
-    path("users/me/", UserUpdateAPIView.as_view()),
+    path("", include(router.urls)),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,21 +1,32 @@
 from django.db.models import Q
-from innotter_page.permissions import IsInRoleAdminOrModerator
+from innotter_page.permissions import IsInStaff
 from innotter_user.roles import Roles
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 from subscribe_request.models import SubscribeRequest
-from subscribe_request.permissions import (IsBlockedPageCreate,
-                                           IsBlockedPageUpdate, IsOwner,
-                                           IsOwnerToAcceptAllSubscribeRequests)
-from subscribe_request.serializers import (CreateSubscribeRequestSerializer,
-                                           ListSubscribeRequestSerializer,
-                                           RetrieveSubscribeRequestSerializer,
-                                           UpdateSubscribeRequestSerializer)
-from subscribe_request.services import (create_subscribe_request,
-                                        update_subscribe_request)
+from subscribe_request.permissions import (
+    IsBlockedPageCreate,
+    IsBlockedPageUpdate,
+    IsOwner,
+    IsOwnerToAcceptAllSubscribeRequests,
+)
+from subscribe_request.serializers import (
+    CreateSubscribeRequestSerializer,
+    ListSubscribeRequestSerializer,
+    RetrieveSubscribeRequestSerializer,
+    UpdateSubscribeRequestSerializer,
+)
+from subscribe_request.services import (
+    create_subscribe_request,
+    update_subscribe_request,
+)
 
 from core_app.default_mixin import GetPermissionsMixin, GetSerializerMixin
 
@@ -46,46 +57,46 @@ class SubscribeRequestMixin(
         ),
         "update": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwner),
+            (IsInStaff | IsOwner),
             IsBlockedPageUpdate,
         ),
         "partial_update": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwner),
+            (IsInStaff | IsOwner),
             IsBlockedPageUpdate,
         ),
         "retrieve": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwner),
+            (IsInStaff | IsOwner),
             IsBlockedPageUpdate,
         ),
         "list": (
             IsAuthenticated,
-            IsInRoleAdminOrModerator,
+            IsInStaff,
         ),
         "destroy": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),
+            (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
         "accept_subscribe_requests": (
             IsAuthenticated,
-            IsInRoleAdminOrModerator,
+            IsInStaff,
         ),
         "accept_page_subscribe_requests": (
             IsAuthenticated
-            & (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),
+            & (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
         "delete_users_from_followers": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),
+            (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
         "decline_page_subscribe_requests": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),
+            (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
         "get_all_page_subscribe_requests": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwnerToAcceptAllSubscribeRequests),
+            (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
     }
 
@@ -112,7 +123,10 @@ class SubscribeRequestMixin(
                 Q(initiator_user=self.request.user)
                 | Q(desired_page__owner=self.request.user)
             )
-        if self.action == "accept_subscribe_requests" and user_role == Roles.ADMIN:
+        if (
+            self.action == "accept_subscribe_requests"
+            and user_role == Roles.ADMIN
+        ):
             return SubscribeRequest.objects.filter(
                 Q(desired_page__owner=self.request.user) & Q(is_accepted=False)
             )
