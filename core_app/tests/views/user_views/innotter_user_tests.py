@@ -122,7 +122,7 @@ class TestUserEndpoints:
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_update(
         self,
-        user,
+        user: user,
         update_json: update_json,
         expected_update_json: expected_update_json,
     ):
@@ -150,7 +150,7 @@ class TestUserEndpoints:
         assert response.data == expected_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_retrieve_me(self, user):
+    def test_retrieve_me(self, user: user):
 
         request = api_factory.get(
             f"{self.endpoint}me/",
