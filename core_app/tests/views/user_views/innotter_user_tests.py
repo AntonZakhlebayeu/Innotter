@@ -1,9 +1,15 @@
 from unittest import mock
 
 import pytest
-from innotter_page.serializers import PageSerializer
+from conftests import (
+    expected_json,
+    expected_update_json,
+    new_user,
+    update_json,
+    user,
+)
 from innotter_user.models import User
-from innotter_user.serializers import UsernameSerializer
+from innotter_user.serializers import UserSerializer
 from innotter_user.views import UserViewSet
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -14,6 +20,8 @@ login_view = UserViewSet.as_view({"post": "login"})
 users_view = UserViewSet.as_view(
     {"get": "retrieve", "put": "update", "delete": "destroy"}
 )
+list_view = UserViewSet.as_view({"get": "list"})
+me_view = UserViewSet.as_view({"get": "me", "put": "update_me"})
 
 pytestmark = pytest.mark.django_db
 
@@ -36,7 +44,7 @@ class TestUserEndpoints:
         }
 
         request = api_factory.post(
-            self.endpoint,
+            f"{self.endpoint}register",
             user_json,
             format="json",
         )
@@ -54,8 +62,7 @@ class TestUserEndpoints:
     @mock.patch(
         "innotter_user.serializers.LoginSerializer.is_valid", return_value=True
     )
-    def test_login(self, mock_is_valid):
-        user = baker.make(User)
+    def test_login(self, mock_is_valid, user: user):
 
         login_json = {
             "user": {
@@ -85,22 +92,20 @@ class TestUserEndpoints:
             assert response.data == user_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_retrieve(self):
-        user = baker.make(User)
-        user.role = "admin"
-        user.save()
+    def test_list(self, user: user):
+        baker.make(User, _refresh_after_create=True, _quantity=4)
 
-        expected_json = {
-            "email": user.email,
-            "username": user.username,
-            "is_active": user.is_active,
-            "is_staff": user.is_staff,
-            "role": user.role,
-            "pages": PageSerializer(user.pages.all(), many=True).data,
-            "refresh_token": user.refresh_token,
-            "follows": UsernameSerializer(user.follows.all(), many=True).data,
-            "is_blocked": user.is_blocked,
-        }
+        request = api_factory.get(self.endpoint)
+
+        force_authenticate(request, user=user, token=user.access_token)
+        response = list_view(request)
+
+        assert response.status_code == 200
+        assert len(response.data) == 5
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_retrieve(self, user: user, expected_json: expected_json):
+        expected_json = expected_json
 
         request = api_factory.get(f"{self.endpoint}{user.pk}/")
         force_authenticate(request, user=user, token=user.access_token)
@@ -115,9 +120,71 @@ class TestUserEndpoints:
         assert response.cookies["access_token"].value == user.access_token
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_delete(self):
-        user = baker.make(User)
-        user.role = "admin"
+    def test_update(
+        self,
+        user,
+        update_json: update_json,
+        expected_update_json: expected_update_json,
+    ):
+        current_user = baker.make(User)
+        current_user.role = "admin"
+        current_user.save()
+
+        user_json = update_json
+        expected_json = expected_update_json
+
+        old_user = User.objects.get(pk=user.pk, role=user.role)
+
+        request = api_factory.put(
+            f"{self.endpoint}{old_user.pk}/",
+            user_json,
+            format="json",
+        )
+
+        force_authenticate(
+            request, user=current_user, token=current_user.access_token
+        )
+        response = users_view(request, pk=old_user.pk)
+
+        assert response.status_code == 200
+        assert response.data == expected_json
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_retrieve_me(self, user):
+
+        request = api_factory.get(
+            f"{self.endpoint}me/",
+        )
+        force_authenticate(request, user=user, token=user.access_token)
+        response = me_view(request)
+
+        assert response.status_code == 200
+        assert response.data == UserSerializer(user).data
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_update_me(
+        self,
+        user: user,
+        update_json: update_json,
+        expected_update_json: expected_update_json,
+    ):
+        user_json = update_json
+        expected_json = expected_update_json
+
+        request = api_factory.put(
+            f"{self.endpoint}update_me/",
+            user_json,
+            format="json",
+        )
+
+        force_authenticate(request, user=user, token=user.access_token)
+        response = me_view(request)
+
+        assert response.status_code == 200
+        assert response.data == expected_json
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_delete(self, user: user):
 
         request = api_factory.delete(f"{self.endpoint}/{user.pk}/")
 

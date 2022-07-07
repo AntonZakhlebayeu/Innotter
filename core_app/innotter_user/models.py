@@ -49,14 +49,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(
-        db_index=True, max_length=255, unique=True, default="User"
-    )
+    username = models.CharField(db_index=True, max_length=255, unique=True)
     image_s3_path = models.CharField(max_length=200, null=True, blank=True)
-    role = models.CharField(
-        max_length=9, choices=Roles.choices, default=Roles.USER
-    )
-    title = models.CharField(max_length=80, default="Untitled")
+    role = models.CharField(max_length=9, choices=Roles.choices)
+    title = models.CharField(max_length=80)
     is_blocked = models.BooleanField(default=False)
     refresh_token = models.CharField(max_length=255, blank=True)
     USERNAME_FIELD = "email"

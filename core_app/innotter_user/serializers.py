@@ -91,6 +91,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "username",
             "password",
+            "title",
             "is_active",
             "is_staff",
             "role",
@@ -119,7 +120,6 @@ class UserSerializer(serializers.ModelSerializer):
         return rep
 
     def update(self, instance, validated_data):
-        print(validated_data)
         password = validated_data.pop("password", None)
 
         for key, value in validated_data.items():
