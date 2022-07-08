@@ -3,6 +3,7 @@ from innotter_page.serializers import PageSerializer
 from innotter_user.models import User
 from innotter_user.serializers import UsernameSerializer
 from model_bakery import baker
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 
 @pytest.fixture()
@@ -58,3 +59,8 @@ def expected_update_json(user: User, new_user: User):
         "follows": UsernameSerializer(user.follows.all(), many=True).data,
         "is_blocked": new_user.is_blocked,
     }
+
+
+@pytest.fixture()
+def api_factory():
+    return APIRequestFactory()

@@ -2,6 +2,7 @@ from unittest import mock
 
 import pytest
 from conftests import (
+    api_factory,
     expected_json,
     expected_update_json,
     new_user,
@@ -14,7 +15,6 @@ from innotter_user.views import UserViewSet
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-api_factory = APIRequestFactory()
 register_view = UserViewSet.as_view({"post": "register"})
 login_view = UserViewSet.as_view({"post": "login"})
 users_view = UserViewSet.as_view(
@@ -32,6 +32,7 @@ class TestUserEndpoints:
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_register(
         self,
+        api_factory: APIRequestFactory,
     ):
         user_json = {
             "user": {
@@ -62,7 +63,9 @@ class TestUserEndpoints:
     @mock.patch(
         "innotter_user.serializers.LoginSerializer.is_valid", return_value=True
     )
-    def test_login(self, mock_is_valid, user: user):
+    def test_login(
+        self, mock_is_valid, user: user, api_factory: APIRequestFactory
+    ):
 
         login_json = {
             "user": {
@@ -92,7 +95,7 @@ class TestUserEndpoints:
             assert response.data == user_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_list(self, user: user):
+    def test_list(self, user: user, api_factory: APIRequestFactory):
         baker.make(User, _refresh_after_create=True, _quantity=4)
 
         request = api_factory.get(self.endpoint)
@@ -104,7 +107,12 @@ class TestUserEndpoints:
         assert len(response.data) == 5
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_retrieve(self, user: user, expected_json: expected_json):
+    def test_retrieve(
+        self,
+        user: user,
+        expected_json: expected_json,
+        api_factory: APIRequestFactory,
+    ):
         expected_json = expected_json
 
         request = api_factory.get(f"{self.endpoint}{user.pk}/")
@@ -125,6 +133,7 @@ class TestUserEndpoints:
         user: user,
         update_json: update_json,
         expected_update_json: expected_update_json,
+        api_factory: APIRequestFactory,
     ):
         current_user = baker.make(User)
         current_user.role = "admin"
@@ -150,7 +159,7 @@ class TestUserEndpoints:
         assert response.data == expected_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_retrieve_me(self, user: user):
+    def test_retrieve_me(self, user: user, api_factory: APIRequestFactory):
 
         request = api_factory.get(
             f"{self.endpoint}me/",
@@ -167,6 +176,7 @@ class TestUserEndpoints:
         user: user,
         update_json: update_json,
         expected_update_json: expected_update_json,
+        api_factory: APIRequestFactory,
     ):
         user_json = update_json
         expected_json = expected_update_json
@@ -184,7 +194,7 @@ class TestUserEndpoints:
         assert response.data == expected_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_delete(self, user: user):
+    def test_delete(self, user: user, api_factory: APIRequestFactory):
 
         request = api_factory.delete(f"{self.endpoint}/{user.pk}/")
 
