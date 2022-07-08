@@ -231,6 +231,7 @@ class UserMixin(
         user = User.objects.get(pk=kwargs.get("pk", None))
 
         user.is_blocked = True
+        user.save()
 
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
@@ -250,5 +251,6 @@ class UserMixin(
         user = User.objects.get(pk=kwargs.get("pk", None))
 
         user.is_blocked = False
+        user.save()
 
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)

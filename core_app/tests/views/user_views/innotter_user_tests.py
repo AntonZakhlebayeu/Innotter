@@ -22,6 +22,8 @@ users_view = UserViewSet.as_view(
 )
 list_view = UserViewSet.as_view({"get": "list"})
 me_view = UserViewSet.as_view({"get": "me", "put": "update_me"})
+block_view = UserViewSet.as_view({"put": "block"})
+unblock_view = UserViewSet.as_view({"put": "unblock"})
 
 pytestmark = pytest.mark.django_db
 
@@ -66,7 +68,6 @@ class TestUserEndpoints:
     def test_login(
         self, mock_is_valid, user: user, api_factory: APIRequestFactory
     ):
-
         login_json = {
             "user": {
                 "email": user.email,
@@ -160,7 +161,6 @@ class TestUserEndpoints:
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_retrieve_me(self, user: user, api_factory: APIRequestFactory):
-
         request = api_factory.get(
             f"{self.endpoint}me/",
         )
@@ -195,7 +195,6 @@ class TestUserEndpoints:
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_delete(self, user: user, api_factory: APIRequestFactory):
-
         request = api_factory.delete(f"{self.endpoint}/{user.pk}/")
 
         force_authenticate(request, user=user, token=user.access_token)
@@ -203,3 +202,34 @@ class TestUserEndpoints:
 
         assert response.status_code == 204
         assert User.objects.all().count() == 0
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_block(
+        self, user: user, new_user: new_user, api_factory: APIRequestFactory
+    ):
+        user_to_block = new_user
+        user_to_block.save()
+
+        request = api_factory.put(f"{self.endpoint}/{user_to_block.pk}/block/")
+        force_authenticate(request, user=user, token=user.access_token)
+        response = block_view(request, pk=user_to_block.pk)
+
+        assert response.status_code == 200
+        assert User.objects.get(pk=user_to_block.pk).is_blocked is True
+
+    @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
+    def test_unblock(
+        self, user: user, new_user: new_user, api_factory: APIRequestFactory
+    ):
+        user_to_unblock = new_user
+        user_to_unblock.is_blocked = True
+        user_to_unblock.save()
+
+        request = api_factory.put(
+            f"{self.endpoint}/{user_to_unblock.pk}/unblock/"
+        )
+        force_authenticate(request, user=user, token=user.access_token)
+        response = unblock_view(request, pk=user_to_unblock.pk)
+
+        assert response.status_code == 200
+        assert User.objects.get(pk=user_to_unblock.pk).is_blocked is False
