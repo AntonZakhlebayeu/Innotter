@@ -11,7 +11,6 @@ class CreatePostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         kwargs = self.context.get("request").parser_context["kwargs"]
         page = Page.objects.get(pk=kwargs["pages_pk"])
-        print(page.followers.count())
         validated_data["page"] = page
 
         post = Post.objects.create(**validated_data)
@@ -30,7 +29,14 @@ class RetrievePostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["page", "content", "reply_to", "created_at", "updated_at", "replies"]
+        fields = [
+            "page",
+            "content",
+            "reply_to",
+            "created_at",
+            "updated_at",
+            "replies",
+        ]
 
 
 class ListPostSerializer(serializers.ModelSerializer):
@@ -38,4 +44,11 @@ class ListPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["page", "content", "reply_to", "created_at", "updated_at", "replies"]
+        fields = [
+            "page",
+            "content",
+            "reply_to",
+            "created_at",
+            "updated_at",
+            "replies",
+        ]

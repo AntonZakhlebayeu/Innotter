@@ -3,7 +3,7 @@ from datetime import datetime
 from innotter_page.models import Page
 from innotter_page.permissions import (
     IsBlockedPage,
-    IsInRoleAdminOrModerator,
+    IsInStaff,
     IsOwner,
     IsPublicPage,
 )
@@ -25,30 +25,30 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
         "create": (IsAuthenticated,),
         "retrieve": (
             IsAuthenticated,
-            (IsPublicPage | IsOwner | IsInRoleAdminOrModerator),
+            (IsPublicPage | IsOwner | IsInStaff),
             IsBlockedPage,
         ),
         "update": (
             IsAuthenticated,
-            (IsInRoleAdminOrModerator | IsOwner),
+            (IsInStaff | IsOwner),
             IsBlockedPage,
         ),
         "destroy": (
             IsAuthenticated,
-            (IsOwner | IsInRoleAdminOrModerator),
+            (IsOwner | IsInStaff),
             IsBlockedPage,
         ),
         "list": (
             IsAuthenticated,
-            IsInRoleAdminOrModerator,
+            IsInStaff,
         ),
         "block": (
             IsAuthenticated,
-            IsInRoleAdminOrModerator,
+            IsInStaff,
         ),
         "unblock": (
             IsAuthenticated,
-            IsInRoleAdminOrModerator,
+            IsInStaff,
         ),
     }
 
@@ -59,7 +59,7 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
             {
                 "block": (
                     IsAuthenticated,
-                    IsInRoleAdminOrModerator,
+                    IsInStaff,
                 ),
             }
         ),
@@ -89,7 +89,7 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
             {
                 "unblock": (
                     IsAuthenticated,
-                    IsInRoleAdminOrModerator,
+                    IsInStaff,
                 ),
             }
         ),

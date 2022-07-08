@@ -2,8 +2,11 @@ from datetime import datetime, timedelta
 
 import jwt
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import (AbstractUser, Permission,
-                                        PermissionsMixin)
+from django.contrib.auth.models import (
+    AbstractUser,
+    Permission,
+    PermissionsMixin,
+)
 from django.db import models
 from innotter_user.roles import Roles
 
@@ -11,7 +14,9 @@ from core_app import settings
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, role=None, title=None):
+    def create_user(
+        self, username, email, password=None, role=None, title=None
+    ):
 
         if email is None:
             raise TypeError("Users must have an email address.")
@@ -20,7 +25,10 @@ class UserManager(BaseUserManager):
             raise TypeError("Users must have an username")
 
         user = self.model(
-            username=username, email=self.normalize_email(email), title=title, role=role
+            username=username,
+            email=self.normalize_email(email),
+            title=title,
+            role=role,
         )
         user.set_password(password)
         user.save()
@@ -84,7 +92,9 @@ class User(AbstractUser, PermissionsMixin):
         dt = datetime.now() + timedelta(hours=5)
 
         token = jwt.encode(
-            {"exp": int(dt.strftime("%s"))}, settings.SECRET_KEY, algorithm="HS256"
+            {"exp": int(dt.strftime("%s"))},
+            settings.SECRET_KEY,
+            algorithm="HS256",
         )
 
         return token
