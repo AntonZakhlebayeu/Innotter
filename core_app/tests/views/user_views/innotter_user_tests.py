@@ -1,19 +1,19 @@
 from unittest import mock
 
 import pytest
-from conftests import (
-    api_factory,
+from innotter_user.models import User
+from innotter_user.serializers import UserSerializer
+from innotter_user.views import UserViewSet
+from model_bakery import baker
+from rest_framework.test import APIRequestFactory, force_authenticate
+from tests.views.conftests import api_factory
+from tests.views.user_views.conftests import (
     expected_json,
     expected_update_json,
     new_user,
     update_json,
     user,
 )
-from innotter_user.models import User
-from innotter_user.serializers import UserSerializer
-from innotter_user.views import UserViewSet
-from model_bakery import baker
-from rest_framework.test import APIRequestFactory, force_authenticate
 
 register_view = UserViewSet.as_view({"post": "register"})
 login_view = UserViewSet.as_view({"post": "login"})
