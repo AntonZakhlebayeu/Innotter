@@ -39,6 +39,8 @@ class UserMixin(
         "login": LoginSerializer,
         "update_me": UserSerializer,
         "me": UserSerializer,
+        "block": UserSerializer,
+        "unblock": UserSerializer,
     }
 
     permission_classes = {
@@ -66,6 +68,14 @@ class UserMixin(
         "login": (AllowAny,),
         "me": (IsAuthenticated,),
         "update_me": (IsAuthenticated,),
+        "block": (
+            IsAuthenticated,
+            IsInRoleAdmin,
+        ),
+        "unblock": (
+            IsAuthenticated,
+            IsInRoleAdmin,
+        ),
     }
 
     def retrieve(self, request, *args, **kwargs):
@@ -204,3 +214,41 @@ class UserMixin(
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=True,
+        methods=("put",),
+        permission_classes=(
+            {
+                "block": (
+                    IsAuthenticated,
+                    IsInRoleAdmin,
+                ),
+            }
+        ),
+    )
+    def block(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs.get("pk", None))
+
+        user.is_blocked = True
+
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=True,
+        methods=("put",),
+        permission_classes=(
+            {
+                "unblock": (
+                    IsAuthenticated,
+                    IsInRoleAdmin,
+                ),
+            }
+        ),
+    )
+    def unblock(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs.get("pk", None))
+
+        user.is_blocked = False
+
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
