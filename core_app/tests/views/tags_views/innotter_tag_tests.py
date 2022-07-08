@@ -65,7 +65,7 @@ class TestTagEndpoint:
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_list(
-        self, user: user, page: page, tag: tag, api_factory: APIRequestFactory
+        self, user: user, page: page, api_factory: APIRequestFactory
     ):
         page.tags.set(baker.make(Tag, _quantity=3))
 
@@ -76,5 +76,5 @@ class TestTagEndpoint:
 
         assert response.status_code == 200
         assert page.tags.all().count() == 3
-        assert Tag.objects.all().count() == 4
+        assert Tag.objects.all().count() == 3
         assert TagSerializer(page.tags.all(), many=True).data == response.data

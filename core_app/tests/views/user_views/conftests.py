@@ -7,10 +7,7 @@ from model_bakery import baker
 
 @pytest.fixture()
 def user():
-    user = baker.make(User)
-    user.role = "admin"
-    user.save()
-    return user
+    return baker.make(User, role="admin")
 
 
 @pytest.fixture()

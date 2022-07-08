@@ -1,14 +1,24 @@
 from innotter_page.models import Page
-from innotter_post.permissions import (IsBlockedPage, IsInRoleAdminOrModerator,
-                                       IsOwner, IsPublicPage)
-from innotter_post.serializers import (CreatePostSerializer,
-                                       ListPostSerializer,
-                                       RetrievePostSerializer,
-                                       UpdatePostSerializer)
+from innotter_post.permissions import (
+    IsBlockedPage,
+    IsInRoleAdminOrModerator,
+    IsOwner,
+    IsPublicPage,
+)
+from innotter_post.serializers import (
+    CreatePostSerializer,
+    ListPostSerializer,
+    RetrievePostSerializer,
+    UpdatePostSerializer,
+)
 from rest_framework.exceptions import NotFound
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
@@ -32,18 +42,23 @@ class PostMixin(
         "partial_update": UpdatePostSerializer,
         "retrieve": RetrievePostSerializer,
         "list": ListPostSerializer,
-        "get_all_posts": ListPostSerializer,
     }
 
     permission_classes = {
         "create": (
-            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated
+            & IsBlockedPage
+            & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "update": (
-            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated
+            & IsBlockedPage
+            & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "partial_update": (
-            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated
+            & IsBlockedPage
+            & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "retrieve": (
             IsAuthenticated
@@ -56,12 +71,9 @@ class PostMixin(
             & (IsInRoleAdminOrModerator | IsOwner | IsPublicPage),
         ),
         "destroy": (
-            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
-        ),
-        "get_all_posts": (
-            IsAuthenticated,
-            IsInRoleAdminOrModerator,
-            IsBlockedPage,
+            IsAuthenticated
+            & IsBlockedPage
+            & (IsInRoleAdminOrModerator | IsOwner),
         ),
     }
 
