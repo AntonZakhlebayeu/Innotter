@@ -18,7 +18,6 @@ class TagSerializer(serializers.ModelSerializer):
         return rep
 
     def create(self, validated_data):
-        print(validated_data)
         tag = Tag.objects.create(name=validated_data["name"])
 
         request = self.context.get("request")
