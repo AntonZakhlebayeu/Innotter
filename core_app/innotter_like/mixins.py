@@ -1,14 +1,21 @@
 from innotter_like.models import Like
-from innotter_like.permissions import IsOwner, IsPublicPage
-from innotter_like.serializers import (CreateLikeSerializer,
-                                       ListLikeSerializer,
-                                       RetrieveLikeSerializer)
+from innotter_like.permissions import IsBlockedPage, IsOwner, IsPublicPage
+from innotter_like.serializers import (
+    CreateLikeSerializer,
+    ListLikeSerializer,
+    RetrieveLikeSerializer,
+)
 from innotter_like.services import create_like, delete_like
-from innotter_post.permissions import IsBlockedPage, IsInRoleAdminOrModerator
+from innotter_post.models import Post
+from innotter_post.permissions import IsInRoleAdminOrModerator
 from innotter_user.roles import Roles
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
@@ -39,8 +46,7 @@ class LikeMixin(
         ),
         "list": (
             IsAuthenticated,
-            (IsPublicPage | IsOwner | IsInRoleAdminOrModerator),
-            IsBlockedPage,
+            IsInRoleAdminOrModerator,
         ),
         "destroy": (
             IsAuthenticated,
@@ -57,7 +63,8 @@ class LikeMixin(
     def perform_create(self, serializer):
 
         if not Like.objects.filter(
-            owner=self.request.user, post__id=serializer.validated_data.get("post").pk
+            owner=self.request.user,
+            post__id=serializer.validated_data.get("post").pk,
         ).exists():
             create_like(
                 current_user=self.request.user,
@@ -70,6 +77,12 @@ class LikeMixin(
             )
 
     def get_queryset(self):
-        if self.action == "list" and self.request.user.role == Roles.USER:
-            return Like.objects.filter(owner=self.request.user)
-        return self.queryset
+        if self.request.data.get("post") is not None:
+            return Like.objects.filter(
+                post=Post.objects.get(pk=self.request.data.get("post"))
+            )
+        elif (
+            self.request.user.role == Roles.ADMIN
+            and self.request.data.get("post") is None
+        ):
+            return Like.objects.all()
