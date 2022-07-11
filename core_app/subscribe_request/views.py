@@ -1,11 +1,15 @@
 from innotter_page.models import Page
+from innotter_user.models import User
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from subscribe_request.mixins import SubscribeRequestMixin
 from subscribe_request.models import SubscribeRequest
-from subscribe_request.serializers import RetrieveSubscribeRequestSerializer
+from subscribe_request.serializers import (
+    ListSubscribeRequestSerializer,
+    RetrieveSubscribeRequestSerializer,
+)
 from subscribe_request.services import accept_all_subscribe_requests
 
 
@@ -14,7 +18,9 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
 
     @action(detail=False, methods=("patch",))
     def accept_subscribe_requests(self, request):
-        accept_all_subscribe_requests(queryset_subscribe_requests=self.get_queryset())
+        accept_all_subscribe_requests(
+            queryset_subscribe_requests=self.get_queryset()
+        )
         return Response(status=HTTP_200_OK)
 
     @action(detail=False, methods=("get",))
@@ -23,7 +29,9 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
             desired_page=request.data.get("desired_page"), is_accepted=False
         )
 
-        requests = RetrieveSubscribeRequestSerializer(many=True, data=requests_queryset)
+        requests = ListSubscribeRequestSerializer(
+            many=True, data=requests_queryset
+        )
         requests.is_valid()
 
         return Response(data=requests.data, status=status.HTTP_200_OK)
@@ -32,7 +40,8 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
     def accept_page_subscribe_requests(self, request):
         accept_all_subscribe_requests(
             queryset_subscribe_requests=SubscribeRequest.objects.filter(
-                desired_page=request.data.get("desired_page"), is_accepted=False
+                desired_page=request.data.get("desired_page"),
+                is_accepted=False,
             )
         )
         return Response(status=HTTP_200_OK)
@@ -47,7 +56,9 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
         )
         subscribe_requests.delete()
 
-        return Response({"detail": "Declined."}, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Declined."}, status=status.HTTP_204_NO_CONTENT
+        )
 
     @action(detail=False, methods=("delete",))
     def delete_users_from_followers(self, request):
@@ -59,4 +70,6 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
 
         page.save()
 
-        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT
+        )

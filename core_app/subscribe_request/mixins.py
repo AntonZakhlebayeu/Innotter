@@ -118,16 +118,13 @@ class SubscribeRequestMixin(
 
     def get_queryset(self):
         user_role = self.request.user.role
-        if self.action == "list" and user_role == Roles.ADMIN:
-            return SubscribeRequest.objects.filter(
-                Q(initiator_user=self.request.user)
-                | Q(desired_page__owner=self.request.user)
-            )
+        if self.action == "list" and (
+            user_role == Roles.ADMIN or user_role == Roles.MODERATOR
+        ):
+            return SubscribeRequest.objects.all()
         if (
             self.action == "accept_subscribe_requests"
             and user_role == Roles.ADMIN
         ):
-            return SubscribeRequest.objects.filter(
-                Q(desired_page__owner=self.request.user) & Q(is_accepted=False)
-            )
+            return SubscribeRequest.objects.filter(Q(is_accepted=False))
         return self.queryset
