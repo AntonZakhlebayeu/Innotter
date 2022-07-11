@@ -10,6 +10,26 @@ env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+CELERY_BROKER_URL = os.getenv("BROKER_URL")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False").lower() in (
+    "true",
+    "1",
+    "t",
+)
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() in (
+    "true",
+    "1",
+    "t",
+)
+
 
 DEBUG = True
 
@@ -111,7 +131,3 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-CELERY_BROKER_URL = os.getenv("BROKER_URL")
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"

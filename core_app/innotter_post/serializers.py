@@ -1,5 +1,6 @@
 from innotter_page.models import Page
 from innotter_post.models import Post
+from innotter_post.tasks import send_email_to_followers_task
 from rest_framework import serializers
 
 
@@ -9,11 +10,17 @@ class CreatePostSerializer(serializers.ModelSerializer):
         fields = ["content", "reply_to", "created_at", "updated_at"]
 
     def create(self, validated_data):
-        kwargs = self.context.get("request").parser_context["kwargs"]
+        request = self.context.get("request")
+        kwargs = request.parser_context["kwargs"]
         page = Page.objects.get(pk=kwargs["pages_pk"])
         validated_data["page"] = page
 
         post = Post.objects.create(**validated_data)
+
+        emails = [user.email for user in page.followers.all()]
+        send_email_to_followers_task.apply_async(
+            kwargs={"emails": emails, "page_name": page.name}
+        )
 
         return post
 
