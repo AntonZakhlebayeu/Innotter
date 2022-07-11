@@ -1,7 +1,7 @@
 from innotter_like.views import LikeViewSet
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
-router = DefaultRouter()
+router = SimpleRouter()
 
 app_name = "likes"
 router.register(r"likes", LikeViewSet, basename="likes")

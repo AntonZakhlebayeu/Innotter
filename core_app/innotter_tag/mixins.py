@@ -27,7 +27,6 @@ class TagMixin(
     viewsets.GenericViewSet,
     ListModelMixin,
     CreateModelMixin,
-    UpdateModelMixin,
     RetrieveModelMixin,
     DestroyModelMixin,
 ):
@@ -41,16 +40,6 @@ class TagMixin(
         "retrieve": (
             IsAuthenticated,
             (IsPublicPage | IsOwner | IsInStaff),
-            IsBlockedPage,
-        ),
-        "update": (
-            IsAuthenticated,
-            (IsInStaff | IsOwner),
-            IsBlockedPage,
-        ),
-        "partial_update": (
-            IsAuthenticated,
-            (IsInStaff | IsOwner),
             IsBlockedPage,
         ),
         "destroy": (
