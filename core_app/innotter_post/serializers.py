@@ -23,6 +23,13 @@ class CreatePostSerializer(serializers.ModelSerializer):
         send_email_to_followers_task.apply_async(
             kwargs={"emails": emails, "page_name": page.name},
             link_error=error_handler.s(),
+            retry=True,
+            retry_policy={
+                "max_retries": 5,
+                "interval_start": 0,
+                "interval_step": 0.2,
+                "interval_max": 0.2,
+            },
         )
 
         return post
