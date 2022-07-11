@@ -3,6 +3,8 @@ from innotter_post.models import Post
 from innotter_post.tasks import send_email_to_followers_task
 from rest_framework import serializers
 
+from core_app.celery import error_handler
+
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,7 +21,8 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
         emails = [user.email for user in page.followers.all()]
         send_email_to_followers_task.apply_async(
-            kwargs={"emails": emails, "page_name": page.name}
+            kwargs={"emails": emails, "page_name": page.name},
+            link_error=error_handler.s(),
         )
 
         return post
