@@ -11,6 +11,10 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print(f"Request: {self.request!r}")
+@app.task
+def error_handler(request, exc, traceback):
+    print(
+        "Task {0} raised exception: {1!r}\n{2!r}".format(
+            request.id, exc, traceback
+        )
+    )
