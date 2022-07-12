@@ -1,10 +1,5 @@
 from innotter_page.models import Page
-from innotter_page.permissions import (
-    IsBlockedPage,
-    IsInStaff,
-    IsOwner,
-    IsPublicPage,
-)
+from innotter_page.permissions import IsBlockedPage, IsInStaff, IsOwner, IsPublicPage
 from innotter_tag.models import Tag
 from innotter_tag.serializers import TagSerializer
 from rest_framework import status, viewsets
@@ -98,9 +93,7 @@ class TagMixin(
             Tag.objects.get(pk=kwargs["pk"])
         )
 
-        return Response(
-            {"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT
-        )
+        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self, *args, **kwargs):
         pages_id = self.kwargs.get("pages_pk")

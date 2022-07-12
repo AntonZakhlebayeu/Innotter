@@ -1,7 +1,7 @@
 version: '3.10'
 services:
   web:
-    restart: always
+    restart: on-failure
     volumes:
       - ./core_app:/app
     build:
@@ -13,7 +13,14 @@ services:
     entrypoint:
       - ./django-entrypoint.sh
     depends_on:
+      - rabbit
       - db
+      - celery
+      - fastapi
+    links:
+      - rabbit
+      - fastapi
+      - celery
 
   rabbit:
     image: rabbitmq:3.10.5-management
@@ -31,6 +38,7 @@ services:
       - "5432:5432"
 
   celery:
+    restart: always
     volumes:
       - ./core_app:/app
     build:
@@ -42,7 +50,34 @@ services:
     depends_on:
       - rabbit
       - db
-      - web
+    links:
+      - rabbit
+
+  fastapi:
+    restart: always
+    volumes:
+      - ./microservice:/app
+    build:
+      context: .
+    env_file:
+      - ./.env
+    entrypoint:
+      ./fast-api-entrypoint.sh
+    depends_on:
+      - rabbit
+      - mongo
+    ports:
+      - "80:80"
+    links:
+      - rabbit
+
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "27017:27017"
 
 volumes:
   postgres_data:

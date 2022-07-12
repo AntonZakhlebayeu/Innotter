@@ -6,9 +6,7 @@ from rest_framework import serializers
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        max_length=128, min_length=8, write_only=True
-    )
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
 
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
@@ -47,14 +45,10 @@ class LoginSerializer(serializers.Serializer):
         )
 
         if email is None:
-            raise serializers.ValidationError(
-                "An email address is required to log in."
-            )
+            raise serializers.ValidationError("An email address is required to log in.")
 
         if password is None:
-            raise serializers.ValidationError(
-                "A password is required to log in."
-            )
+            raise serializers.ValidationError("A password is required to log in.")
 
         user = authenticate(username=email, password=password)
 
@@ -64,9 +58,7 @@ class LoginSerializer(serializers.Serializer):
             )
 
         if not user.is_active:
-            raise serializers.ValidationError(
-                "This user has been deactivated."
-            )
+            raise serializers.ValidationError("This user has been deactivated.")
 
         return {
             "email": user.email,
@@ -78,9 +70,7 @@ class LoginSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(
-        max_length=128, min_length=8, write_only=True
-    )
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
 
     pages = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     follows = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -111,12 +101,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["pages"] = SmallPageInfoSerializer(
-            instance.pages.all(), many=True
-        ).data
-        rep["follows"] = SmallPageInfoSerializer(
-            instance.pages.all(), many=True
-        ).data
+        rep["pages"] = SmallPageInfoSerializer(instance.pages.all(), many=True).data
+        rep["follows"] = SmallPageInfoSerializer(instance.pages.all(), many=True).data
         return rep
 
     def update(self, instance, validated_data):

@@ -54,10 +54,7 @@ class TestPageEndpoint:
         response = page_viewset(request)
 
         assert response.status_code == 201
-        assert (
-            response.data
-            == PageSerializer(Page.objects.get(uuid=new_page.uuid)).data
-        )
+        assert response.data == PageSerializer(Page.objects.get(uuid=new_page.uuid)).data
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
     def test_retrieve(
@@ -107,9 +104,7 @@ class TestPageEndpoint:
         assert response.data == expected_update_json
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_delete(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_delete(self, user: user, page: page, api_factory: APIRequestFactory):
         request = api_factory.delete(f"{self.endpoint}{page.pk}")
         force_authenticate(request, user=user, token=user.access_token)
 
@@ -138,9 +133,7 @@ class TestPageEndpoint:
         assert not Page.objects.get(pk=page.pk).is_temporary_blocked()
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_unblock(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_unblock(self, user: user, page: page, api_factory: APIRequestFactory):
         request = api_factory.put(
             f"{self.endpoint}{page.pk}/unblock/", {"page": {}}, format="json"
         )

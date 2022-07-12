@@ -62,12 +62,8 @@ class TestUserEndpoints:
         assert response.status_code == 201
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    @mock.patch(
-        "innotter_user.serializers.LoginSerializer.is_valid", return_value=True
-    )
-    def test_login(
-        self, mock_is_valid, user: user, api_factory: APIRequestFactory
-    ):
+    @mock.patch("innotter_user.serializers.LoginSerializer.is_valid", return_value=True)
+    def test_login(self, mock_is_valid, user: user, api_factory: APIRequestFactory):
         login_json = {
             "user": {
                 "email": user.email,
@@ -82,9 +78,7 @@ class TestUserEndpoints:
             "refresh_token": user.refresh_token,
         }
 
-        with mock.patch(
-            "innotter_user.serializers.LoginSerializer.data", user_json
-        ):
+        with mock.patch("innotter_user.serializers.LoginSerializer.data", user_json):
             request = api_factory.post(
                 f"{self.endpoint}/login/",
                 login_json,
@@ -151,9 +145,7 @@ class TestUserEndpoints:
             format="json",
         )
 
-        force_authenticate(
-            request, user=current_user, token=current_user.access_token
-        )
+        force_authenticate(request, user=current_user, token=current_user.access_token)
         response = users_view(request, pk=old_user.pk)
 
         assert response.status_code == 200
@@ -204,9 +196,7 @@ class TestUserEndpoints:
         assert User.objects.all().count() == 0
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_block(
-        self, user: user, new_user: new_user, api_factory: APIRequestFactory
-    ):
+    def test_block(self, user: user, new_user: new_user, api_factory: APIRequestFactory):
         user_to_block = new_user
         user_to_block.save()
 
@@ -225,9 +215,7 @@ class TestUserEndpoints:
         user_to_unblock.is_blocked = True
         user_to_unblock.save()
 
-        request = api_factory.put(
-            f"{self.endpoint}/{user_to_unblock.pk}/unblock/"
-        )
+        request = api_factory.put(f"{self.endpoint}/{user_to_unblock.pk}/unblock/")
         force_authenticate(request, user=user, token=user.access_token)
         response = unblock_view(request, pk=user_to_unblock.pk)
 

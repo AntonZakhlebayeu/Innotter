@@ -2,11 +2,7 @@ from datetime import datetime, timedelta
 
 import jwt
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import (
-    AbstractUser,
-    Permission,
-    PermissionsMixin,
-)
+from django.contrib.auth.models import AbstractUser, Permission, PermissionsMixin
 from django.db import models
 from innotter_user.roles import Roles
 
@@ -14,9 +10,7 @@ from core_app import settings
 
 
 class UserManager(BaseUserManager):
-    def create_user(
-        self, username, email, password=None, role=None, title=None
-    ):
+    def create_user(self, username, email, password=None, role=None, title=None):
 
         if email is None:
             raise TypeError("Users must have an email address.")

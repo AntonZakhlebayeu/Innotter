@@ -1,6 +1,7 @@
 from innotter_page.models import Page
 from innotter_tag.serializers import TagPageSerializer
 from innotter_user.serializers import UsernameSerializer
+from producer import publish
 from rest_framework import serializers
 
 
@@ -11,6 +12,7 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = [
+            "id",
             "uuid",
             "name",
             "description",
@@ -37,5 +39,7 @@ class PageSerializer(serializers.ModelSerializer):
             tags = validated_data.pop("tags")
             page = Page.objects.create(**validated_data)
             page.tags.set(tags)
+
+        publish("page_created", PageSerializer(page).data)
 
         return page

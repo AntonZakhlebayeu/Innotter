@@ -2,10 +2,7 @@ from unittest import mock
 
 import pytest
 from innotter_like.models import Like
-from innotter_like.serializers import (
-    CreateLikeSerializer,
-    RetrieveLikeSerializer,
-)
+from innotter_like.serializers import CreateLikeSerializer, RetrieveLikeSerializer
 from innotter_like.views import LikeViewSet
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -25,9 +22,7 @@ class TestLikeEndpoint:
     endpoint = "/api/likes/"
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_create(
-        self, user: user, post: post, api_factory: APIRequestFactory
-    ):
+    def test_create(self, user: user, post: post, api_factory: APIRequestFactory):
         like_json = {"post": post.pk}
 
         request = api_factory.post(self.endpoint, like_json, format="json")
@@ -59,9 +54,7 @@ class TestLikeEndpoint:
         assert Like.objects.count() == 0
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_retrieve(
-        self, user: user, post: post, api_factory: APIRequestFactory
-    ):
+    def test_retrieve(self, user: user, post: post, api_factory: APIRequestFactory):
         like = baker.make(Like, owner=user, post=post)
 
         request = api_factory.get(
@@ -75,9 +68,7 @@ class TestLikeEndpoint:
         assert response.data == RetrieveLikeSerializer(like).data
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_destroy(
-        self, user: user, post: post, api_factory: APIRequestFactory
-    ):
+    def test_destroy(self, user: user, post: post, api_factory: APIRequestFactory):
         like = baker.make(Like, owner=user, post=post)
 
         request = api_factory.delete(

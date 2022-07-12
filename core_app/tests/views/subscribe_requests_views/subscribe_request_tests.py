@@ -53,9 +53,7 @@ class TestSubscribeRequestEndpoint:
             "desired_page": page.id,
         }
 
-        request = api_factory.post(
-            f"{self.endpoint}", create_json, format="json"
-        )
+        request = api_factory.post(f"{self.endpoint}", create_json, format="json")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = subscribe_request_viewset(request)
@@ -121,12 +119,8 @@ class TestSubscribeRequestEndpoint:
         assert SubscribeRequest.objects.count() == 0
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_list(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
-        baker.make(
-            SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False
-        )
+    def test_list(self, user: user, page: page, api_factory: APIRequestFactory):
+        baker.make(SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False)
 
         request = api_factory.get(f"{self.endpoint}")
         force_authenticate(request, user=user, token=user.access_token)
@@ -138,12 +132,8 @@ class TestSubscribeRequestEndpoint:
         assert SubscribeRequest.objects.count() == 4
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_accept_all(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
-        baker.make(
-            SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False
-        )
+    def test_accept_all(self, user: user, page: page, api_factory: APIRequestFactory):
+        baker.make(SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False)
 
         request = api_factory.patch(f"{self.endpoint}")
         force_authenticate(request, user=user, token=user.access_token)
@@ -157,9 +147,7 @@ class TestSubscribeRequestEndpoint:
     def test_accept_page_subscribe_requests(
         self, user: user, page: page, api_factory: APIRequestFactory
     ):
-        baker.make(
-            SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False
-        )
+        baker.make(SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False)
         baker.make(
             SubscribeRequest,
             _quantity=5,
@@ -169,18 +157,14 @@ class TestSubscribeRequestEndpoint:
 
         page_json = {"desired_page": page.pk}
 
-        request = api_factory.patch(
-            f"{self.endpoint}", page_json, format="json"
-        )
+        request = api_factory.patch(f"{self.endpoint}", page_json, format="json")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = accept_page_viewset(request)
 
         assert response.status_code == 200
         assert (
-            SubscribeRequest.objects.filter(
-                desired_page=page, is_accepted=True
-            ).count()
+            SubscribeRequest.objects.filter(desired_page=page, is_accepted=True).count()
             == 4
         )
 
@@ -188,9 +172,7 @@ class TestSubscribeRequestEndpoint:
     def test_get_all_page_subscribe_requests(
         self, user: user, page: page, api_factory: APIRequestFactory
     ):
-        baker.make(
-            SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False
-        )
+        baker.make(SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False)
         baker.make(
             SubscribeRequest,
             _quantity=5,
@@ -200,9 +182,7 @@ class TestSubscribeRequestEndpoint:
 
         page_json = {"desired_page": page.pk}
 
-        request = api_factory.patch(
-            f"{self.endpoint}", page_json, format="json"
-        )
+        request = api_factory.patch(f"{self.endpoint}", page_json, format="json")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = get_all_page_subscribe_requests_viewset(request)
@@ -219,9 +199,7 @@ class TestSubscribeRequestEndpoint:
     def test_decline_subscribe_request(
         self, user: user, page: page, api_factory: APIRequestFactory
     ):
-        baker.make(
-            SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False
-        )
+        baker.make(SubscribeRequest, _quantity=4, desired_page=page, is_accepted=False)
         baker.make(
             SubscribeRequest,
             _quantity=5,
@@ -231,9 +209,7 @@ class TestSubscribeRequestEndpoint:
 
         page_json = {"desired_page": page.pk}
 
-        request = api_factory.delete(
-            f"{self.endpoint}", page_json, format="json"
-        )
+        request = api_factory.delete(f"{self.endpoint}", page_json, format="json")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = decline_page_subscribe_requests_viewset(request)
@@ -252,9 +228,7 @@ class TestSubscribeRequestEndpoint:
 
         page_json = {"users": remove, "desired_page": page.pk}
 
-        request = api_factory.delete(
-            f"{self.endpoint}", page_json, format="json"
-        )
+        request = api_factory.delete(f"{self.endpoint}", page_json, format="json")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = delete_users_from_followers_viewset(request)
