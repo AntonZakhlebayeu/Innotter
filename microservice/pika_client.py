@@ -1,38 +1,34 @@
 import json
-import os
 import uuid
-from pathlib import Path
 
 import pika
 from aio_pika import connect_robust
-from dotenv import load_dotenv
+from settings import settings
 
 from microservice.services.follower_service import update_followers_count
 from microservice.services.like_service import update_likes_count
 from microservice.services.page_service import page_statistics_data
 from microservice.services.post_service import update_posts_count
 
-BASE_DIR = Path(__file__).resolve()
-env_path = Path(".") / ".env"
-load_dotenv(dotenv_path=env_path)
-RABBIT_URL = os.getenv("RABBIT_URL")
-RABBIT_QUEUE_NAME = os.getenv("RABBIT_QUEUE_NAME")
-
 
 class PikaClient:
     def __init__(self, process_callable):
-        self.publish_queue_name = RABBIT_QUEUE_NAME
-        self.connection = pika.BlockingConnection(pika.URLParameters(RABBIT_URL))
+        self.publish_queue_name = settings.RABBIT_QUEUE_NAME
+        self.connection = pika.BlockingConnection(
+            pika.URLParameters(settings.RABBIT_URL)
+        )
         self.channel = self.connection.channel()
-        self.publish_queue = self.channel.queue_declare(queue=self.publish_queue_name)
+        self.publish_queue = self.channel.queue_declare(
+            queue=self.publish_queue_name
+        )
         self.callback_queue = self.publish_queue.method.queue
         self.response = None
         self.process_callable = process_callable
 
     async def consume(self, loop):
-        connection = await connect_robust(RABBIT_URL)
+        connection = await connect_robust(settings.RABBIT_URL)
         channel = await connection.channel()
-        queue = await channel.declare_queue(RABBIT_QUEUE_NAME)
+        queue = await channel.declare_queue(settings.RABBIT_QUEUE_NAME)
         await queue.consume(self.process_incoming_message, no_ack=False)
 
         return connection
