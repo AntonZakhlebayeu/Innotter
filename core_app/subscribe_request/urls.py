@@ -6,6 +6,8 @@ router = DefaultRouter()
 app_name = "subscribe_requests"
 
 router.register(
-    r"subscribe_requests", SubscribeRequestViewSet, basename="subscribe_requests"
+    r"subscribe_requests",
+    SubscribeRequestViewSet,
+    basename="subscribe_requests",
 )
 urlpatterns = router.urls

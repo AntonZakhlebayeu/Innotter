@@ -85,9 +85,7 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "core_app.exceptions.core_exception_handler",
     "NON_FIELD_ERRORS_KEY": "error",
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "innotter_user.backends.JWTAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("innotter_user.backends.JWTAuthentication",),
 }
 
 WSGI_APPLICATION = "core_app.wsgi.application"

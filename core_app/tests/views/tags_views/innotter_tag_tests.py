@@ -13,9 +13,7 @@ from tests.views.user_views.conftests import user
 
 pytestmark = pytest.mark.django_db
 
-tag_viewset = TagList.as_view(
-    {"get": "retrieve", "post": "create", "delete": "destroy"}
-)
+tag_viewset = TagList.as_view({"get": "retrieve", "post": "create", "delete": "destroy"})
 list_viewset = TagList.as_view({"get": "list"})
 
 
@@ -23,9 +21,7 @@ class TestTagEndpoint:
     endpoint = "api/pages/"
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_create(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_create(self, user: user, page: page, api_factory: APIRequestFactory):
         request = api_factory.post(
             f"{self.endpoint}{page.pk}/tags", {"name": "test"}, format="json"
         )
@@ -64,9 +60,7 @@ class TestTagEndpoint:
         assert Tag.objects.all().count() == 1
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_list(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_list(self, user: user, page: page, api_factory: APIRequestFactory):
         page.tags.set(baker.make(Tag, _quantity=3))
 
         request = api_factory.get(f"{self.endpoint}{page.pk}/tags/")

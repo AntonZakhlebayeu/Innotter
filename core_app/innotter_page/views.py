@@ -1,14 +1,10 @@
 from datetime import datetime
 
 from innotter_page.models import Page
-from innotter_page.permissions import (
-    IsBlockedPage,
-    IsInStaff,
-    IsOwner,
-    IsPublicPage,
-)
+from innotter_page.permissions import IsBlockedPage, IsInStaff, IsOwner, IsPublicPage
 from innotter_page.serializers import PageSerializer
 from innotter_page.utils import time_converter
+from producer import publish
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -52,6 +48,17 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
         ),
     }
 
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        publish("page_updated", response.data)
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        response = super().destroy(request, *args, **kwargs)
+        publish("page_deleted", {"pk": pk})
+        return response
+
     @action(
         detail=True,
         methods=["put"],
@@ -78,9 +85,7 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
 
         page_model.save()
 
-        return Response(
-            PageSerializer(page_model).data, status=status.HTTP_200_OK
-        )
+        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)
 
     @action(
         detail=True,
@@ -107,6 +112,4 @@ class PageList(GetPermissionsMixin, viewsets.ModelViewSet):
 
         page_model.save()
 
-        return Response(
-            PageSerializer(page_model).data, status=status.HTTP_200_OK
-        )
+        return Response(PageSerializer(page_model).data, status=status.HTTP_200_OK)

@@ -30,14 +30,8 @@ class IsBlockedPage(BasePermission):
     def has_permission(self, request, view):
         if request.method != "POST":
             page = Like.objects.get(pk=view.kwargs["pk"]).post.page
-            return (
-                not page.is_permanent_blocked and page.is_temporary_blocked()
-            )
+            return not page.is_permanent_blocked and page.is_temporary_blocked()
         return (
-            not Post.objects.get(
-                pk=request.data.get("post")
-            ).page.is_permanent_blocked
-            and Post.objects.get(
-                pk=request.data.get("post")
-            ).page.is_temporary_blocked()
+            not Post.objects.get(pk=request.data.get("post")).page.is_permanent_blocked
+            and Post.objects.get(pk=request.data.get("post")).page.is_temporary_blocked()
         )

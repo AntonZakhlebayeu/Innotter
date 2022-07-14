@@ -8,10 +8,7 @@ from rest_framework.permissions import BasePermission
 
 class IsInStaff(BasePermission):
     def has_permission(self, request, view):
-        return (
-            request.user.role == Roles.ADMIN
-            or request.user.role == Roles.MODERATOR
-        )
+        return request.user.role == Roles.ADMIN or request.user.role == Roles.MODERATOR
 
 
 class IsOwner(BasePermission):
@@ -22,9 +19,7 @@ class IsOwner(BasePermission):
         ):
             return False
 
-        return (
-            request.user.pk == Page.objects.get(pk=view.kwargs["pk"]).owner_id
-        )
+        return request.user.pk == Page.objects.get(pk=view.kwargs["pk"]).owner_id
 
 
 class IsPublicPage(BasePermission):

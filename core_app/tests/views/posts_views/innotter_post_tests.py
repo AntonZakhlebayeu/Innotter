@@ -98,9 +98,7 @@ class TestPostEndpoint:
         post: post,
         api_factory: APIRequestFactory,
     ):
-        request = api_factory.delete(
-            f"{self.endpoint}{page.pk}/posts/{post.pk}/"
-        )
+        request = api_factory.delete(f"{self.endpoint}{page.pk}/posts/{post.pk}/")
         force_authenticate(request, user=user, token=user.access_token)
 
         response = post_viewset(request, pages_pk=page.pk, pk=post.pk)
@@ -109,9 +107,7 @@ class TestPostEndpoint:
         assert Post.objects.all().count() == 0
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_list(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_list(self, user: user, page: page, api_factory: APIRequestFactory):
         baker.make(Post, page=page, _quantity=4)
 
         request = api_factory.get(f"{self.endpoint}{page.pk}/posts/")
@@ -125,9 +121,7 @@ class TestPostEndpoint:
         assert Post.objects.all().count() == len(response.data)
 
     @mock.patch("core_app.settings.SECRET_KEY", "1234567890")
-    def test_get_all_posts(
-        self, user: user, page: page, api_factory: APIRequestFactory
-    ):
+    def test_get_all_posts(self, user: user, page: page, api_factory: APIRequestFactory):
         baker.make(Post, page=page, _quantity=3)
 
         new_page = baker.make(Page)

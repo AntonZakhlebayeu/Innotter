@@ -23,10 +23,7 @@ from subscribe_request.serializers import (
     RetrieveSubscribeRequestSerializer,
     UpdateSubscribeRequestSerializer,
 )
-from subscribe_request.services import (
-    create_subscribe_request,
-    update_subscribe_request,
-)
+from subscribe_request.services import create_subscribe_request, update_subscribe_request
 
 from core_app.default_mixin import GetPermissionsMixin, GetSerializerMixin
 
@@ -83,8 +80,7 @@ class SubscribeRequestMixin(
             IsInStaff,
         ),
         "accept_page_subscribe_requests": (
-            IsAuthenticated
-            & (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
+            IsAuthenticated & (IsInStaff | IsOwnerToAcceptAllSubscribeRequests),
         ),
         "delete_users_from_followers": (
             IsAuthenticated,
@@ -122,9 +118,6 @@ class SubscribeRequestMixin(
             user_role == Roles.ADMIN or user_role == Roles.MODERATOR
         ):
             return SubscribeRequest.objects.all()
-        if (
-            self.action == "accept_subscribe_requests"
-            and user_role == Roles.ADMIN
-        ):
+        if self.action == "accept_subscribe_requests" and user_role == Roles.ADMIN:
             return SubscribeRequest.objects.filter(Q(is_accepted=False))
         return self.queryset

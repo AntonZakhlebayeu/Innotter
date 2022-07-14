@@ -1,4 +1,5 @@
 from innotter_page.models import Page
+from innotter_post.models import Post
 from innotter_post.permissions import (
     IsBlockedPage,
     IsInRoleAdminOrModerator,
@@ -11,6 +12,7 @@ from innotter_post.serializers import (
     RetrievePostSerializer,
     UpdatePostSerializer,
 )
+from producer import publish
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import (
     CreateModelMixin,
@@ -46,19 +48,13 @@ class PostMixin(
 
     permission_classes = {
         "create": (
-            IsAuthenticated
-            & IsBlockedPage
-            & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "update": (
-            IsAuthenticated
-            & IsBlockedPage
-            & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "partial_update": (
-            IsAuthenticated
-            & IsBlockedPage
-            & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
         ),
         "retrieve": (
             IsAuthenticated
@@ -71,11 +67,15 @@ class PostMixin(
             & (IsInRoleAdminOrModerator | IsOwner | IsPublicPage),
         ),
         "destroy": (
-            IsAuthenticated
-            & IsBlockedPage
-            & (IsInRoleAdminOrModerator | IsOwner),
+            IsAuthenticated & IsBlockedPage & (IsInRoleAdminOrModerator | IsOwner),
         ),
     }
+
+    def destroy(self, request, *args, **kwargs):
+        pk = Post.objects.get(pk=kwargs.get("pk")).page.pk
+        response = super().destroy(request, *args, **kwargs)
+        publish("post_deleted", pk)
+        return response
 
     def get_queryset(self, *args, **kwargs):
         pages_id = self.kwargs.get("pages_pk")

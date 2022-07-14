@@ -18,9 +18,7 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
 
     @action(detail=False, methods=("patch",))
     def accept_subscribe_requests(self, request):
-        accept_all_subscribe_requests(
-            queryset_subscribe_requests=self.get_queryset()
-        )
+        accept_all_subscribe_requests(queryset_subscribe_requests=self.get_queryset())
         return Response(status=HTTP_200_OK)
 
     @action(detail=False, methods=("get",))
@@ -29,9 +27,7 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
             desired_page=request.data.get("desired_page"), is_accepted=False
         )
 
-        requests = ListSubscribeRequestSerializer(
-            many=True, data=requests_queryset
-        )
+        requests = ListSubscribeRequestSerializer(many=True, data=requests_queryset)
         requests.is_valid()
 
         return Response(data=requests.data, status=status.HTTP_200_OK)
@@ -56,9 +52,7 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
         )
         subscribe_requests.delete()
 
-        return Response(
-            {"detail": "Declined."}, status=status.HTTP_204_NO_CONTENT
-        )
+        return Response({"detail": "Declined."}, status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=("delete",))
     def delete_users_from_followers(self, request):
@@ -70,6 +64,4 @@ class SubscribeRequestViewSet(SubscribeRequestMixin):
 
         page.save()
 
-        return Response(
-            {"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT
-        )
+        return Response({"detail": "Deleted."}, status=status.HTTP_204_NO_CONTENT)

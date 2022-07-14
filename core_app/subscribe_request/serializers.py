@@ -15,9 +15,7 @@ class CreateSubscribeRequestSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["initiator_user"] = UsernameSerializer(
-            self.context["request"].user
-        ).data
+        rep["initiator_user"] = UsernameSerializer(self.context["request"].user).data
         return rep
 
 
