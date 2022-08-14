@@ -10,7 +10,7 @@ env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-CELERY_BROKER_URL = os.getenv("BROKER_URL")
+BROKER_URL = os.getenv("BROKER_URL")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
